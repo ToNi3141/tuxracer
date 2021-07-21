@@ -24,6 +24,8 @@
 #   include <config.h>
 #endif
 
+#define HAVE_GLUT 1
+
 #if defined ( __MWERKS__ ) || defined( _MSC_VER )
 #   define NATIVE_WIN32_COMPILER 1
 #else
@@ -98,16 +100,20 @@
 #   include <dirent.h>
 #endif
 
+#define VERSION "1.2.3"
+#define HAVE_GETTIMEOFDAY 1
+
 /* OpenGL */
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
 
 #ifdef HAVE_GL_GLX_H
 #   include <GL/glx.h>
 #endif
 
 /* Tcl -- name of header is system-dependent :( */
-#include TCL_HEADER
+#include <tcl.h>
 
 #ifndef M_PI
 #   define M_PI 3.1415926535
@@ -132,17 +138,17 @@
 
 #define PROG_NAME "tuxracer"
 
-#if defined( HAVE_FINITE )
+//#if defined( HAVE_FINITE )
 #   define FINITE(x) (finite(x))
-#elif defined( HAVE__FINITE )
-#   define FINITE(x) (_finite(x))
-#elif defined( HAVE_ISNAN )
-#   define FINITE(x) (!isnan(x))
-#elif defined( HAVE__ISNAN )
-#   define FINITE(x) (!_isnan(x))
-#else
-#   error "You don't have finite(), _finite(), isnan(), or _isnan() on your system!"
-#endif
+//#elif defined( HAVE__FINITE )
+//#   define FINITE(x) (_finite(x))
+//#elif defined( HAVE_ISNAN )
+//#   define FINITE(x) (!isnan(x))
+//#elif defined( HAVE__ISNAN )
+//#   define FINITE(x) (!_isnan(x))
+//#else
+//#   error "You don't have finite(), _finite(), isnan(), or _isnan() on your system!"
+//#endif
 
 
 /* Macros for swapping bytes */

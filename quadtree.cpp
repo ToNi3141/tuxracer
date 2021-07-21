@@ -995,28 +995,28 @@ GLubyte *VNCArray;
 
 void quadsquare::DrawTris()
 {
-    int tmp_min_idx = VertexArrayMinIdx;
-    if ( glLockArraysEXT_p && getparam_use_cva() ) {
+//    int tmp_min_idx = VertexArrayMinIdx;
+//    if ( glLockArraysEXT_p && getparam_use_cva() ) {
 
-	if ( getparam_cva_hack() ) {
-	    /* This is a hack that seems to fix the "psychedelic colours" on 
-	       some drivers (TNT/TNT2, for example)
-	     */
-	    if ( tmp_min_idx == 0 ) {
-		tmp_min_idx = 1;
-	    }
-	} 
+//	if ( getparam_cva_hack() ) {
+//	    /* This is a hack that seems to fix the "psychedelic colours" on
+//	       some drivers (TNT/TNT2, for example)
+//	     */
+//	    if ( tmp_min_idx == 0 ) {
+//		tmp_min_idx = 1;
+//	    }
+//	}
 
-	glLockArraysEXT_p( tmp_min_idx, 
-			 VertexArrayMaxIdx - tmp_min_idx + 1 ); 
-    }
+//	glLockArraysEXT_p( tmp_min_idx,
+//			 VertexArrayMaxIdx - tmp_min_idx + 1 );
+//    }
 
     glDrawElements( GL_TRIANGLES, VertexArrayCounter,
 		    GL_UNSIGNED_INT, VertexArrayIndices );
 
-    if ( glUnlockArraysEXT_p && getparam_use_cva() ) {
-	glUnlockArraysEXT_p();
-    }
+//    if ( glUnlockArraysEXT_p && getparam_use_cva() ) {
+//	glUnlockArraysEXT_p();
+//    }
 }
 
 void quadsquare::DrawEnvmapTris() 

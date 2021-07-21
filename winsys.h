@@ -25,7 +25,7 @@
 #if defined( HAVE_SDL )
 #   include "SDL.h"
 #elif defined( HAVE_GLUT )
-#   include "GL/glut.h"
+#   include "GLUT/glut.h"
 #else
 #   error "Neither SDL nor GLUT are present."
 #endif

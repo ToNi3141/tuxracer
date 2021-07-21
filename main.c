@@ -118,7 +118,7 @@ void read_game_init_script()
     } 
 }
 
-    
+void dummy() {}
 
 int main( int argc, char **argv ) 
 {
@@ -265,6 +265,7 @@ int main( int argc, char **argv )
 
     /* We use this to "prime" the GLUT loop */
     winsys_set_idle_func( main_loop );
+    winsys_set_display_func(dummy);
 
     
     /* 

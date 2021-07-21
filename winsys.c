@@ -647,10 +647,10 @@ void winsys_init( int *argc, char **argv, char *window_title,
 #endif 
 
     /* Create a window */
-    if ( getparam_fullscreen() ) {
-	glutInitWindowPosition( 0, 0 );
-	glutEnterGameMode();
-    } else {
+//    if ( getparam_fullscreen() ) {
+//	glutInitWindowPosition( 0, 0 );
+//	glutEnterGameMode();
+//    } else {
 	/* Set the initial window size */
 	width = getparam_x_resolution();
 	height = getparam_y_resolution();
@@ -665,7 +665,7 @@ void winsys_init( int *argc, char **argv, char *window_title,
 	if ( glutWindow == 0 ) {
 	    handle_error( 1, "Couldn't create a window." );
 	}
-    }
+//    }
 }
 
 

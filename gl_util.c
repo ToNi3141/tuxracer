@@ -1,4 +1,4 @@
-/* 
+/*
  * Tux Racer 
  * Copyright (C) 1999-2001 Jasmin F. Patry
  * 
@@ -390,46 +390,46 @@ void init_glfloat_array( int num, GLfloat arr[], ... )
 }
 
 /* Extension func ptrs *must* be initialized to NULL */
-PFNGLLOCKARRAYSEXTPROC glLockArraysEXT_p = NULL;
-PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysEXT_p = NULL;
+//PFNGLLOCKARRAYSEXTPROC glLockArraysEXT_p = NULL;
+//PFNGLUNLOCKARRAYSEXTPROC glUnlockArraysEXT_p = NULL;
 
 typedef void (*(*get_gl_proc_fptr_t)(const GLubyte *))(); 
 
 void init_opengl_extensions()
 {
-    get_gl_proc_fptr_t get_gl_proc;
+//    get_gl_proc_fptr_t get_gl_proc;
 
-#if defined( HAVE_SDL )
-    get_gl_proc = (get_gl_proc_fptr_t) SDL_GL_GetProcAddress;
-#elif defined( WIN32 )
-    get_gl_proc = (get_gl_proc_fptr_t) wglGetProcAddress;
-#elif defined( HAVE_GLXGETPROCADDRESSARB )
-    get_gl_proc = (get_gl_proc_fptr_t) glXGetProcAddressARB;
-#else
-    get_gl_proc = NULL;
-#endif
+//#if defined( HAVE_SDL )
+//    get_gl_proc = (get_gl_proc_fptr_t) SDL_GL_GetProcAddress;
+//#elif defined( WIN32 )
+//    get_gl_proc = (get_gl_proc_fptr_t) wglGetProcAddress;
+//#elif defined( HAVE_GLXGETPROCADDRESSARB )
+//    get_gl_proc = (get_gl_proc_fptr_t) glXGetProcAddressARB;
+//#else
+//    get_gl_proc = NULL;
+//#endif
 
-    if ( get_gl_proc ) {
-	glLockArraysEXT_p = (PFNGLLOCKARRAYSEXTPROC) 
-	    (*get_gl_proc)( (GLubyte*) "glLockArraysEXT" );
-	glUnlockArraysEXT_p = (PFNGLUNLOCKARRAYSEXTPROC) 
-	    (*get_gl_proc)( (GLubyte*) "glUnlockArraysEXT" );
+//    if ( get_gl_proc ) {
+//	glLockArraysEXT_p = (PFNGLLOCKARRAYSEXTPROC)
+//	    (*get_gl_proc)( (GLubyte*) "glLockArraysEXT" );
+//	glUnlockArraysEXT_p = (PFNGLUNLOCKARRAYSEXTPROC)
+//	    (*get_gl_proc)( (GLubyte*) "glUnlockArraysEXT" );
 	
-	if ( glLockArraysEXT_p != NULL && glUnlockArraysEXT_p != NULL ) {
-	    print_debug( DEBUG_GL_EXT, 
-			 "GL_EXT_compiled_vertex_array extension "
-			 "supported" );
-	} else {
-	    print_debug( DEBUG_GL_EXT, 
-			 "GL_EXT_compiled_vertex_array extension "
-			 "NOT supported" );
-	    glLockArraysEXT_p = NULL;
-	    glUnlockArraysEXT_p = NULL;
-	}
-    } else {
-	print_debug( DEBUG_GL_EXT, 
-		     "No function available for obtaining GL proc addresses" );
-    }
+//	if ( glLockArraysEXT_p != NULL && glUnlockArraysEXT_p != NULL ) {
+//	    print_debug( DEBUG_GL_EXT,
+//			 "GL_EXT_compiled_vertex_array extension "
+//			 "supported" );
+//	} else {
+//	    print_debug( DEBUG_GL_EXT,
+//			 "GL_EXT_compiled_vertex_array extension "
+//			 "NOT supported" );
+//	    glLockArraysEXT_p = NULL;
+//	    glUnlockArraysEXT_p = NULL;
+//	}
+//    } else {
+//	print_debug( DEBUG_GL_EXT,
+//		     "No function available for obtaining GL proc addresses" );
+//    }
 }
 
 
