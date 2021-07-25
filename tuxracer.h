@@ -24,8 +24,6 @@
 #   include <config.h>
 #endif
 
-#define HAVE_GLUT 1
-
 #if defined ( __MWERKS__ ) || defined( _MSC_VER )
 #   define NATIVE_WIN32_COMPILER 1
 #else

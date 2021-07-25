@@ -7,6 +7,7 @@ LIBS += -framework OpenGL
 LIBS += -framework GLUT
 LIBS += -framework Tcl
 DEFINES += TRACK_TRIANGLES
+DEFINES += HAVE_GLUT
 
 SOURCES += \
     alglib.c \
