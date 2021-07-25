@@ -326,7 +326,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[0] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f( -1, -1, -1);
   glTexCoord2f( 1.0, 0.0 );
@@ -340,7 +340,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[1] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f( -1,  1, -1);
   glTexCoord2f( 1.0, 0.0 );
@@ -354,7 +354,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[2] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f( -1, -1,  1);
   glTexCoord2f( 1.0, 0.0 );
@@ -369,7 +369,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[3] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f( -1, -1,  1);
   glTexCoord2f( 1.0, 0.0 );
@@ -384,7 +384,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[4] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f(  1, -1, -1);
   glTexCoord2f( 1.0, 0.0 );
@@ -399,7 +399,7 @@ void draw_sky(point_t pos)
   glBindTexture( GL_TEXTURE_2D, texture_id[5] );
   glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
 
-  glBegin(GL_QUADS);
+  glBegin(GL_TRIANGLE_FAN);
   glTexCoord2f( 0.0, 0.0 );
   glVertex3f(  1, -1,  1);
   glTexCoord2f( 1.0, 0.0 );
@@ -482,7 +482,7 @@ void draw_trees()
 
 	glNormal3f( normal.x, normal.y, normal.z );
 
-        glBegin( GL_QUADS );
+        glBegin( GL_TRIANGLE_FAN );
         glTexCoord2f( 0., 0. );
         glVertex3f( -treeRadius, 0.0, 0.0 );
         glTexCoord2f( 1., 0. );
@@ -491,10 +491,12 @@ void draw_trees()
         glVertex3f( treeRadius, treeHeight, 0.0 );
         glTexCoord2f( 0., 1. );
         glVertex3f( -treeRadius, treeHeight, 0.0 );
+        glEnd();
 
 	if ( !clip_course ||
 	     eye_pt.z - treeLocs[i].ray.pt.z < fwd_tree_detail_limit )
 	{
+        glBegin( GL_TRIANGLE_FAN );
 	    glTexCoord2f( 0., 0. );
 	    glVertex3f( 0.0, 0.0, -treeRadius );
 	    glTexCoord2f( 1., 0. );
@@ -503,9 +505,9 @@ void draw_trees()
 	    glVertex3f( 0.0, treeHeight, treeRadius );
 	    glTexCoord2f( 0., 1. );
 	    glVertex3f( 0.0, treeHeight, -treeRadius );
+        glEnd();
 	}
 
-        glEnd();
         glPopMatrix();
     } 
 
@@ -561,7 +563,7 @@ void draw_trees()
 	    normal.y = 0.0;
 	    normalize_vector( &normal );
 
-	    glBegin( GL_QUADS );
+	    glBegin( GL_TRIANGLE_FAN );
 	    {
 		glTexCoord2f( 0., 0. );
 		glVertex3f( -itemRadius*normal.z, 
@@ -700,7 +702,9 @@ void draw_fog_plane()
 
     glColor4fv( fog_colour );
 
-    glBegin( GL_QUAD_STRIP );
+    // TODO: This was using GL_QUAD_STRIP. It seems to work right now
+    // but it should be buggy. Probably the bug is not visible
+    glBegin( GL_TRIANGLE_STRIP ); // GL_QUAD_STRIP
 
     glVertex3f( bottom_left_pt.x, bottom_left_pt.y, bottom_left_pt.z );
     glVertex3f( bottom_right_pt.x, bottom_right_pt.y, bottom_right_pt.z );

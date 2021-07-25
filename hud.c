@@ -204,7 +204,7 @@ static void draw_herring_count( int herring_count )
 		      getparam_y_resolution() - HERRING_ICON_Y_OFFSET - asc, 
 		      0 );
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glTexCoord2f( 0, 0 );
 	    glVertex2f( 0, 0 );
@@ -378,7 +378,7 @@ void draw_gauge( scalar_t speed, scalar_t energy )
 
 	y = ENERGY_GAUGE_BOTTOM + energy * ENERGY_GAUGE_HEIGHT;
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glVertex2f( 0.0, y );
 	    glVertex2f( GAUGE_IMG_SIZE, y );
@@ -389,7 +389,7 @@ void draw_gauge( scalar_t speed, scalar_t energy )
 
 	glColor4fv( energy_foreground_color );
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glVertex2f( 0.0, 0.0 );
 	    glVertex2f( GAUGE_IMG_SIZE, 0.0 );
@@ -445,7 +445,7 @@ void draw_gauge( scalar_t speed, scalar_t energy )
 
 	glBindTexture( GL_TEXTURE_2D, outline_texobj );
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glVertex2f( 0.0, 0.0 );
 	    glVertex2f( GAUGE_IMG_SIZE, 0.0 );

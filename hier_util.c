@@ -185,9 +185,9 @@ static GLuint get_sphere_display_list( int divisions ) {
     if ( display_lists[idx] == 0 ) {
 	/* Initialize the sphere display list */
 	display_lists[idx] = glGenLists(1);
-	glNewList( display_lists[idx], GL_COMPILE );
+//	glNewList( display_lists[idx], GL_COMPILE );
 	draw_sphere( divisions );
-	glEndList();
+//	glEndList();
     }
 
     return display_lists[idx];
@@ -216,12 +216,12 @@ void traverse_dag( scene_node_t *node, material_t *mat )
         set_material( mat->diffuse, mat->specular_colour, 
                      mat->specular_exp );
 
-	if ( getparam_use_sphere_display_list() ) {
-	    glCallList( get_sphere_display_list( 
-		node->param.sphere.divisions ) );
-	} else {
+//	if ( getparam_use_sphere_display_list() ) {
+	    //glCallList( get_sphere_display_list(
+		//node->param.sphere.divisions ) );
+//	} else {
 	    draw_sphere( node->param.sphere.divisions );
-	}
+//	}
     } 
 
     child = node->child;

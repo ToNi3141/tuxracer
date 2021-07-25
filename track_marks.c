@@ -378,7 +378,7 @@ void draw_track_marks(void)
 	glBindTexture( GL_TEXTURE_2D, texid[q->track_type] );
 
 	if ((q->track_type == TRACK_HEAD) || (q->track_type == TRACK_TAIL)) { 
-	    glBegin(GL_QUADS);
+	    glBegin(GL_TRIANGLE_FAN);
 	    
 	    glNormal3f( q->n1.x, q->n1.y, q->n1.z );
 	    glTexCoord2f( q->t1.x, q->t1.y );
@@ -400,7 +400,7 @@ void draw_track_marks(void)
 
 	} else {
 	      
-	    glBegin(GL_QUAD_STRIP);
+	    glBegin(GL_TRIANGLE_STRIP);
 
 	    glNormal3f( q->n2.x, q->n2.y, q->n2.z );
 	    glTexCoord2f( q->t2.x, q->t2.y );

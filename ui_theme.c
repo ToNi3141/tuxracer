@@ -31,7 +31,7 @@ static void draw_quad(int x, int y, int w, int h)
     glPushMatrix();
     {
 	glTranslatef( x, y, 0 );
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glTexCoord2f( 0, 0 );
 	    glVertex2f( 0, 0 );

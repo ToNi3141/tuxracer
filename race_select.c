@@ -692,7 +692,7 @@ static void set_widget_positions_and_draw_decorations()
 		    ur = make_point2d( 1, 0.5 );
 		}
 
-		glBegin( GL_QUADS );
+		glBegin( GL_TRIANGLE_FAN );
 		{
 		    glTexCoord2f( ll.x, ll.y );
 		    glVertex2f( 0, 0 );
@@ -758,7 +758,7 @@ static void set_widget_positions_and_draw_decorations()
     glDisable( GL_TEXTURE_2D );
 
     glColor4f( 1.0, 1.0, 1.0, 1.0 );
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glVertex2f( x_org+box_width-140, y_org+66 );
 	glVertex2f( x_org+box_width, y_org+66 );
@@ -777,7 +777,7 @@ static void set_widget_positions_and_draw_decorations()
 
     glBindTexture( GL_TEXTURE_2D, texobj );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glTexCoord2d( 0, 0);
 	glVertex2f( x_org+box_width-136, y_org+70 );

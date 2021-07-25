@@ -147,7 +147,7 @@ void draw_billboard( player_data_t *plyr,
 	z_vec.z = plyr->view.inv_view_mat[2][2];
     }
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	pt = move_point( center_pt, scale_vector( -width/2.0, x_vec ) );
 	pt = move_point( pt, scale_vector( -height/2.0, y_vec ) );

@@ -244,7 +244,7 @@ void draw_ui_snow( void )
 	    glPushMatrix();
 	    {
 		glTranslatef( pt->x*xres, pt->y*yres, 0 );
-		glBegin( GL_QUADS );
+		glBegin( GL_TRIANGLE_FAN );
 		{
 		    glTexCoord2f( tex_min->x, tex_min->y );
 		    glVertex2f( 0, 0 );

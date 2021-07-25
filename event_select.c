@@ -211,7 +211,7 @@ static void set_widget_positions_and_draw_decorations()
     glBindTexture( GL_TEXTURE_2D, texobj );
 
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	point2d_t tll, tur;
 	point2d_t ll, ur;
@@ -244,7 +244,7 @@ static void set_widget_positions_and_draw_decorations()
 
     glBindTexture( GL_TEXTURE_2D, texobj );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	point2d_t tll, tur;
 	point2d_t ll, ur;

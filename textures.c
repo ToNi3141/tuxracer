@@ -119,8 +119,8 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
     } else {
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
     }
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
@@ -128,6 +128,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
     /* Check if we need to scale image */
     glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
+    max_texture_size = 128;
     if ( texImage->sizeX > max_texture_size ||
 	 texImage->sizeY > max_texture_size ) 
     {
@@ -144,10 +145,10 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	/* In the case of large- or small-aspect ratio textures, this
            could end up using *more* space... oh well. */
 	gluScaleImage( texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
-		       texImage->sizeX, texImage->sizeY, 
+		       texImage->sizeX, texImage->sizeY,
 		       GL_UNSIGNED_BYTE,
 		       texImage->data,
-		       max_texture_size, max_texture_size, 
+		       max_texture_size, max_texture_size,
 		       GL_UNSIGNED_BYTE,
 		       newdata );
 
@@ -158,7 +159,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
     }
 
     gluBuild2DMipmaps( GL_TEXTURE_2D, texImage->sizeZ, texImage->sizeX,
-		       texImage->sizeY, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA, 
+		       texImage->sizeY, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
 		       GL_UNSIGNED_BYTE, texImage->data );
 
     free( texImage->data );
@@ -236,11 +237,11 @@ bool_t unbind_texture( char *binding )
     return False;
 }
 
-void get_current_texture_dimensions( int *width, int *height )
-{
-    glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width );
-    glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height );
-}
+//void get_current_texture_dimensions( int *width, int *height )
+//{
+//    glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, width );
+//    glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, height );
+//}
 
 bool_t flush_textures(void)
 {

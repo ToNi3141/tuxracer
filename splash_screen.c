@@ -104,7 +104,7 @@ static void draw_logo()
 	ur.y = ll.y + h;
 
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glTexCoord2f( 0.0, 0.0 );
 	    glVertex2f( ll.x, ll.y );

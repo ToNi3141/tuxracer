@@ -532,7 +532,7 @@ static void ui_draw_cursor( void )
 
     glBindTexture( GL_TEXTURE_2D, texobj );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glTexCoord2f( 0, 1 );
 	glVertex2f( cursor_pos.x, 

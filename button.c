@@ -308,7 +308,7 @@ void button_draw( button_t *button )
 
 	glColor4dv( (scalar_t*) &tex->colour );
 
-	glBegin( GL_QUADS );
+	glBegin( GL_TRIANGLE_FAN );
 	{
 	    glTexCoord2f( tex->ll.x, tex->ll.y );
 	    glVertex3f( pos.x, pos.y, 0 );

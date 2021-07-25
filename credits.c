@@ -176,7 +176,7 @@ static void draw_credits_text( scalar_t time_step )
 
     glRectf( 0, 0, w, CREDITS_MIN_Y );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glVertex2f( 0, CREDITS_MIN_Y );
 	glVertex2f( w, CREDITS_MIN_Y );
@@ -193,7 +193,7 @@ static void draw_credits_text( scalar_t time_step )
 
     glRectf( 0, h+CREDITS_MAX_Y, w, h );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glVertex2f( w, h+CREDITS_MAX_Y );
 	glVertex2f( 0, h+CREDITS_MAX_Y );

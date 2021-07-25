@@ -273,7 +273,7 @@ void draw_tex_font_char( tex_font_metrics_t *tfm, char c )
 
     cd = find_char_data( tfm, c );
 
-    glBegin( GL_QUADS );
+    glBegin( GL_TRIANGLE_FAN );
     {
 	glTexCoord2dv( (scalar_t*) &cd->tex_ll );
 	glVertex2dv(   (scalar_t*) &cd->ll     );
