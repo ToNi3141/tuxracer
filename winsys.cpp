@@ -452,6 +452,7 @@ void winsys_exit( int code )
 
 #else
 
+#ifdef HAVE_GLUT
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
 /* GLUT version */
@@ -764,6 +765,150 @@ void winsys_exit( int code )
     exit(code);
 }
 
+#endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
+
+#ifdef USE_SIMULATION
+
+#undef min
+#undef max
+#include <QApplication>
+#include "mainwindow.h"
+
+winsys_keyboard_func_t keyboard_func = NULL;
+winsys_display_func_t disp_func = NULL;
+winsys_idle_func_t idle_func = NULL;
+
+static bool_t redisplay = False;
+
+void winsys_post_redisplay()
+{
+    redisplay = True;
+}
+
+void winsys_set_display_func( winsys_display_func_t func )
+{
+    disp_func = func;
+}
+
+void winsys_set_idle_func( winsys_idle_func_t func )
+{
+    idle_func = func;
+}
+
+void winsys_set_reshape_func( winsys_reshape_func_t func )
+{
+
+}
+
+
+/* Keyboard callbacks */
+//static void glut_keyboard_cb( unsigned char ch, int x, int y )
+//{
+//    if ( keyboard_func ) {
+//	(*keyboard_func)( ch, False, False, x, y );
+//    }
+//}
+
+//static void glut_special_cb( int key, int x, int y )
+//{
+//    if ( keyboard_func ) {
+//	(*keyboard_func)( key, True, False, x, y );
+//    }
+//}
+
+//static void glut_keyboard_up_cb( unsigned char ch, int x, int y )
+//{
+//    if ( keyboard_func ) {
+//	(*keyboard_func)( ch, False, True, x, y );
+//    }
+//}
+
+//static void glut_special_up_cb( int key, int x, int y )
+//{
+//    if ( keyboard_func ) {
+//	(*keyboard_func)( key, True, True, x, y );
+//    }
+//}
+
+void winsys_set_keyboard_func( winsys_keyboard_func_t func )
+{
+    keyboard_func = func;
+}
+
+void winsys_set_mouse_func( winsys_mouse_func_t func )
+{
+}
+
+void winsys_set_motion_func( winsys_motion_func_t func )
+{
+}
+
+void winsys_set_passive_motion_func( winsys_motion_func_t func )
+{
+}
+
+void winsys_swap_buffers()
+{
+    // Implement
+}
+
+void winsys_warp_pointer( int x, int y )
+{
+}
+
+void winsys_init( int *argc, char **argv, char *window_title,
+		  char *icon_title )
+{
+
+    static QApplication a(*argc, argv);
+    static MainWindow w;
+    w.init();
+    setparam_x_resolution(MainWindow::RESOLUTION_W);
+    setparam_y_resolution(MainWindow::RESOLUTION_H);
+    w.show();
+}
+
+void winsys_shutdown()
+{
+}
+
+void winsys_enable_key_repeat( bool_t enabled )
+{
+}
+
+void winsys_show_cursor( bool_t visible )
+{
+}
+
+void winsys_process_events()
+{
+    qApp->exec();
+    // Implement
+//    /* Set up keyboard callbacks */
+//    glutKeyboardFunc( glut_keyboard_cb );
+//    glutKeyboardUpFunc( glut_keyboard_up_cb );
+//    glutSpecialFunc( glut_special_cb );
+//    glutSpecialUpFunc( glut_special_up_cb );
+
+//    glutMainLoop();
+}
+
+void winsys_atexit( winsys_atexit_func_t func )
+{
+    static bool_t called = False;
+
+    check_assertion( called == False, "winsys_atexit called twice" );
+
+    called = True;
+
+    atexit(func);
+}
+
+void winsys_exit( int code )
+{
+    exit(code);
+}
+#endif
 
 /* EOF */

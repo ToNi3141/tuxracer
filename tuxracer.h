@@ -101,6 +101,9 @@
 #define VERSION "1.2.3"
 #define HAVE_GETTIMEOFDAY 1
 
+#ifdef USE_SIMULATION
+#include "RasteriCEer/lib/gl/inc/IceGLWrapper.h"
+#else
 /* OpenGL */
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -109,6 +112,9 @@
 #ifdef HAVE_GL_GLX_H
 #   include <GL/glx.h>
 #endif
+#endif 
+
+
 
 /* Tcl -- name of header is system-dependent :( */
 #include <tcl.h>

@@ -114,21 +114,24 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-
-    if ( repeatable ) {
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-    } else {
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
-	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
-    }
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, 
-                     get_min_filter() );
-
-    /* Check if we need to scale image */
-    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
+#ifdef USE_SIMULATION
     max_texture_size = 128;
+    // The RasteriCEr does not support tex parameters right now
+#else
+        if ( repeatable ) {
+    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        } else {
+    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER );
+    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER );
+        }
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                         get_min_filter() );
+        /* Check if we need to scale image */
+        glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
+#endif
+
     if ( texImage->sizeX > max_texture_size ||
 	 texImage->sizeY > max_texture_size ) 
     {
@@ -144,23 +147,58 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
 	/* In the case of large- or small-aspect ratio textures, this
            could end up using *more* space... oh well. */
-	gluScaleImage( texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
-		       texImage->sizeX, texImage->sizeY,
-		       GL_UNSIGNED_BYTE,
-		       texImage->data,
-		       max_texture_size, max_texture_size,
-		       GL_UNSIGNED_BYTE,
-		       newdata );
+
+#ifdef USE_SIMULATION
+    char* tmpNewData = newdata;
+    char* tmpOldData = texImage->data;
+    uint32_t indexNew = 0;
+    uint32_t indexOld = 0;
+    memset(newdata, 0, 128*128*texImage->sizeZ);
+        for (int y = 0; y < 128; y++)
+        {
+            for (int x = 0; x < 128; x++)
+            {
+                for (int i = 0; i < texImage->sizeZ; i++)
+                {
+                    tmpNewData[indexNew] = tmpOldData[indexOld];
+                    indexNew++;
+                    indexOld++;
+                }
+                if (texImage->sizeX > 256)
+                    indexOld += texImage->sizeZ * 3;
+                else if (texImage->sizeX > 128)
+                    indexOld+=texImage->sizeZ;
+            }
+            if (texImage->sizeY > 256)
+                indexOld += texImage->sizeX * texImage->sizeZ * 3;
+            else if (texImage->sizeY > 128)
+                indexOld += texImage->sizeX * texImage->sizeZ;
+        }
+#else
+    	gluScaleImage( texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
+    		       texImage->sizeX, texImage->sizeY,
+    		       GL_UNSIGNED_BYTE,
+    		       texImage->data,
+    		       max_texture_size, max_texture_size,
+    		       GL_UNSIGNED_BYTE,
+    		       newdata );
+#endif
 
 	free( texImage->data );
 	texImage->data = (unsigned char*) newdata;
 	texImage->sizeX = max_texture_size;
 	texImage->sizeY = max_texture_size;
     }
+#ifdef USE_SIMULATION
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage->sizeX, texImage->sizeY, 0, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texImage->data);
+#else
+        gluBuild2DMipmaps( GL_TEXTURE_2D, texImage->sizeZ, texImage->sizeX,
+    		       texImage->sizeY, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
+    		       GL_UNSIGNED_BYTE, texImage->data );
+#endif
 
-    gluBuild2DMipmaps( GL_TEXTURE_2D, texImage->sizeZ, texImage->sizeX,
-		       texImage->sizeY, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
-		       GL_UNSIGNED_BYTE, texImage->data );
+
+
 
     free( texImage->data );
     free( texImage );

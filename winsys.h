@@ -22,6 +22,9 @@
 #include "tuxracer.h"
 #include "tux_types.h"
 
+#ifdef USE_SIMULATION
+#include "RasteriCEer/lib/gl/inc/IceGLWrapper.h"
+#else
 #if defined( HAVE_SDL )
 #   include "SDL.h"
 #elif defined( HAVE_GLUT )
@@ -29,6 +32,7 @@
 #else
 #   error "Neither SDL nor GLUT are present."
 #endif
+#endif // USE_SIMULATION
 
 #ifdef __cplusplus
 extern "C"
@@ -131,7 +135,7 @@ typedef enum {
 
 /* GLUT doesn't define as many keysyms as SDL; we map those to 
    WSK_NOT_AVAIL (0) */
-
+#ifdef HAVE_GLUT
 typedef enum {
     WSK_NOT_AVAIL = 0,
 
@@ -210,8 +214,89 @@ typedef enum {
     WS_MOUSE_UP = GLUT_UP
 } winsys_button_state_t;
 
+#endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
 
+#ifdef USE_SIMULATION
+typedef enum {
+    WSK_NOT_AVAIL = 0,
+
+    /* Numeric keypad */
+    WSK_KP0 = 0,
+    WSK_KP1 = 0,
+    WSK_KP2 = 0,
+    WSK_KP3 = 0,
+    WSK_KP4 = 0,
+    WSK_KP5 = 0,
+    WSK_KP6 = 0,
+    WSK_KP7 = 0,
+    WSK_KP8 = 0,
+    WSK_KP9 = 0,
+    WSK_KP_PERIOD = 0,
+    WSK_KP_DIVIDE = 0,
+    WSK_KP_MULTIPLY = 0,
+    WSK_KP_MINUS = 0,
+    WSK_KP_PLUS = 0,
+    WSK_KP_ENTER = 0,
+    WSK_KP_EQUALS = 0,
+
+    /* Arrows + Home/End pad */
+    WSK_UP = 0x100,
+    WSK_DOWN = 0x101,
+    WSK_RIGHT = 0x102,
+    WSK_LEFT = 0x103,
+    WSK_INSERT = 0x104,
+    WSK_HOME = 0x105,
+    WSK_END = 0x106,
+    WSK_PAGEUP = 0x107,
+    WSK_PAGEDOWN = 0x108,
+
+    /* Function keys */
+    WSK_F1 = 0x110,
+    WSK_F2 = 0x111,
+    WSK_F3 = 0x112,
+    WSK_F4 = 0x113,
+    WSK_F5 = 0x114,
+    WSK_F6 = 0x115,
+    WSK_F7 = 0x116,
+    WSK_F8 = 0x117,
+    WSK_F9 = 0x118,
+    WSK_F10 = 0x119,
+    WSK_F11 = 0x11a,
+    WSK_F12 = 0x11b,
+    WSK_F13 = 0,
+    WSK_F14 = 0,
+    WSK_F15 = 0,
+
+    /* Key state modifier keys */
+    WSK_NUMLOCK = 0,
+    WSK_CAPSLOCK = 0,
+    WSK_SCROLLOCK = 0,
+    WSK_RSHIFT = 0,
+    WSK_LSHIFT = 0,
+    WSK_RCTRL = 0,
+    WSK_LCTRL = 0,
+    WSK_RALT = 0,
+    WSK_LALT = 0,
+    WSK_RMETA = 0,
+    WSK_LMETA = 0,
+
+    WSK_LAST = UCHAR_MAX /* GLUT doesn't define a max key, but this is more
+			    than enough as of version 3.7 */
+} winsys_keysym_t;
+
+typedef enum {
+    WS_LEFT_BUTTON = 0x120,
+    WS_MIDDLE_BUTTON = 0x121,
+    WS_RIGHT_BUTTON = 0x122
+} winsys_mouse_button_t;
+
+typedef enum {
+    WS_MOUSE_DOWN = 0x130,
+    WS_MOUSE_UP = 0x131
+} winsys_button_state_t;
+
+#endif // USE_SIMULATION
 
 typedef void (*winsys_display_func_t)();
 typedef void (*winsys_idle_func_t)();

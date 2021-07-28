@@ -94,9 +94,13 @@ static void draw_logo()
 
     for (i=0; i<4; i++) {
 	glBindTexture( GL_TEXTURE_2D, texid[i] );
-
+#ifdef USE_SIMULATION
+    w = 128;
+    h = 128;
+#else
 	glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w );
 	glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h );
+#endif
 
 	ll.x = getparam_x_resolution()/2 + xoffsets[i]*w;
 	ll.y = getparam_y_resolution()/2 + yoffsets[i]*h;

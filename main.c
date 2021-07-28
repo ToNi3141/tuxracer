@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-
 #include "tuxracer.h"
 #include "course_load.h"
 #include "course_render.h"
@@ -120,7 +119,7 @@ void read_game_init_script()
 
 void dummy() {}
 
-int main( int argc, char **argv ) 
+int main( int argc, char **argv )
 {
     /* Print copyright notice */
     fprintf( stderr, "Tux Racer " VERSION " -- a Sunspire Studios Production "
@@ -151,7 +150,7 @@ int main( int argc, char **argv )
     g_game.tcl_interp = Tcl_CreateInterp();
 
     if ( g_game.tcl_interp == NULL ) {
-	handle_error( 1, "cannot create Tcl interpreter" ); 
+	handle_error( 1, "cannot create Tcl interpreter" );
     }
 
     /* Setup the configuration variables and read the ~/.tuxracer/options file */
@@ -167,13 +166,13 @@ int main( int argc, char **argv )
     }
 
     /*
-     * Setup Tcl stdout and stderr channels to point to C stdout and stderr 
+     * Setup Tcl stdout and stderr channels to point to C stdout and stderr
      * streams
      */
     setup_tcl_std_channels();
 
 
-    /* 
+    /*
      * Initialize rendering context, create window
      */
     winsys_init( &argc, argv, WINDOW_TITLE, WINDOW_TITLE );
@@ -186,8 +185,8 @@ int main( int argc, char **argv )
     /* Set up a function to clean up when program exits */
     winsys_atexit( cleanup );
 
-    /* 
-     * Initial OpenGL settings 
+    /*
+     * Initial OpenGL settings
      */
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -195,13 +194,13 @@ int main( int argc, char **argv )
 
     /* Print OpenGL debugging information if requested */
     if ( debug_mode_is_active( DEBUG_GL_INFO ) ) {
-	print_debug( DEBUG_GL_INFO, 
+	print_debug( DEBUG_GL_INFO,
 		     "OpenGL information:" );
 	print_gl_info();
     }
 
 
-    /* 
+    /*
      * Load the game data and initialize game state
      */
     register_game_config_callbacks( g_game.tcl_interp );
@@ -230,7 +229,7 @@ int main( int argc, char **argv )
     /* Read the tuxracer_init.tcl file */
     read_game_init_script();
 
-    /* Need to set up an initial view position for select_course 
+    /* Need to set up an initial view position for select_course
        (quadtree simplification)
     */
 
@@ -259,7 +258,7 @@ int main( int argc, char **argv )
     g_game.difficulty = DIFFICULTY_LEVEL_NORMAL;
 
     init_keyboard();
-    
+
 
     winsys_show_cursor( False );
 
@@ -267,12 +266,12 @@ int main( int argc, char **argv )
     winsys_set_idle_func( main_loop );
     winsys_set_display_func(dummy);
 
-    
-    /* 
+
+    /*
      * ...and off we go!
      */
     winsys_process_events();
 
     return 0;
-} 
+}
 

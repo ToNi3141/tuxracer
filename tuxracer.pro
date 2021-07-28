@@ -1,13 +1,63 @@
+#TARGET = glut
+TARGET = simulation
 TEMPLATE = app
 CONFIG += console c++11
 CONFIG -= app_bundle
-CONFIG -= qt
-CONFIG += opengl
+
+LIBS += -framework Tcl
+DEFINES += TUXRACER_NO_ASSERT
+DEFINES += TRACK_TRIANGLES
+
+equals(TARGET, "simulation") {
+CONFIG += qt
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core
+DEFINES += USE_SIMULATION
+#DEFINES += SOFTWARE_RENDERER
+#DEFINES += NO_PERSP_CORRECT
+LIBS += ../tuxracer/RasteriCEer/rtl/top/Verilator/obj_dir/verilated.o
+QMAKE_CXXFLAGS += -I../tuxracer/RasteriCEer/lib/gl/inc/ -I../tuxracer/RasteriCEer/qtRasterizer/ \
+        -I/usr/local/Cellar/verilator/4.100/share/verilator/include/ \
+        ../tuxracer/RasteriCEer/rtl/top/Verilator/obj_dir/ \
+
+SOURCES += \
+    mainwindow.cpp \
+    RasteriCEer/lib/gl/src/TnL.cpp \
+    RasteriCEer/lib/gl/src/IceGL.cpp \
+    RasteriCEer/lib/gl/src/Rasterizer.cpp \
+    RasteriCEer/lib/gl/src/IceGLWrapper.cpp \
+    RasteriCEer/qtRasterizer/softwarerenderer.cpp \
+    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop.cpp\
+    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop__Syms.cpp\
+    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop__Slow.cpp
+
+HEADERS += \
+    mainwindow.h \
+    RasteriCEer/lib/gl/inc/DisplayList.hpp \
+    RasteriCEer/lib/gl/inc/IBusConnector.hpp \
+    RasteriCEer/lib/gl/inc/IRenderer.hpp \
+    RasteriCEer/lib/gl/inc/Renderer.hpp \
+    RasteriCEer/lib/gl/inc/RendererBuckets.hpp \
+    RasteriCEer/lib/gl/inc/TnL.hpp \
+    RasteriCEer/lib/gl/inc/Vec.hpp \
+    RasteriCEer/lib/gl/inc/Veci.hpp \
+    RasteriCEer/lib/gl/inc/GRamAlloc.hpp \
+    RasteriCEer/lib/gl/inc/IceGL.hpp \
+    RasteriCEer/lib/gl/inc/Rasterizer.hpp \
+    RasteriCEer/lib/gl/inc/IceGLWrapper.h \
+    RasteriCEer/lib/gl/inc/IceGLTypes.h \
+    RasteriCEer/qtRasterizer/softwarerenderer.hpp \
+    RasteriCEer/qtRasterizer/VerilatorBusConnector.h
+}
+
+equals(TARGET, "glut") {
+DEFINES += HAVE_GLUT
 LIBS += -framework OpenGL
 LIBS += -framework GLUT
-LIBS += -framework Tcl
-DEFINES += TRACK_TRIANGLES
-DEFINES += HAVE_GLUT
+CONFIG += opengl
+}
+
+
 
 SOURCES += \
     alglib.c \
@@ -81,7 +131,7 @@ SOURCES += \
     ui_theme.c \
     view.c \
     viewfrustum.c \
-    winsys.c
+    winsys.cpp
 
 HEADERS += \
     alglib.h \
@@ -157,3 +207,4 @@ HEADERS += \
     view.h \
     viewfrustum.h \
     winsys.h
+

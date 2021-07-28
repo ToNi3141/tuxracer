@@ -1078,7 +1078,13 @@ void	quadsquare::Render(const quadcornerdata& cd, GLubyte *vnc_array)
 	    glDisableClientState( GL_COLOR_ARRAY );
 	    glColor4f( 1.0, 1.0, 1.0, ENV_MAP_ALPHA / 255.0 );
 
+#ifdef USE_SIMULATION
+		// The RasteriCEr has sphere mapping not implemented. Without implementation
+		// this will cause graphic errors
+	    //DrawEnvmapTris();
+#else
 	    DrawEnvmapTris();
+#endif
 
 	    glEnableClientState( GL_COLOR_ARRAY );
 	}

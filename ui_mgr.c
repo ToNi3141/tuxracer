@@ -81,8 +81,13 @@ void ui_setup_display()
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
-    glOrtho( 0, getparam_x_resolution(), 
+#ifdef USE_SIMULATION
+    glOrthof( 0, getparam_x_resolution(),
 	     0, getparam_y_resolution(), -1.0, 1.0 );
+#else
+    glOrtho( 0, getparam_x_resolution(),
+	     0, getparam_y_resolution(), -1.0, 1.0 );
+#endif 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glTranslatef( offset, offset, -1.0 );
