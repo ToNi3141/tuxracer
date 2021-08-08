@@ -40,6 +40,7 @@ HEADERS += \
     RasteriCEer/lib/gl/inc/RendererBuckets.hpp \
     RasteriCEer/lib/gl/inc/TnL.hpp \
     RasteriCEer/lib/gl/inc/Vec.hpp \
+    RasteriCEer/lib/gl/inc/Mat44.hpp \
     RasteriCEer/lib/gl/inc/Veci.hpp \
     RasteriCEer/lib/gl/inc/GRamAlloc.hpp \
     RasteriCEer/lib/gl/inc/IceGL.hpp \
