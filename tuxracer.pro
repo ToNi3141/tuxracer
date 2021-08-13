@@ -1,7 +1,8 @@
 #TARGET = glut
 TARGET = simulation
 TEMPLATE = app
-CONFIG += console c++11
+CONFIG += console c++17
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 CONFIG -= app_bundle
 
 LIBS += -framework Tcl
