@@ -23,7 +23,7 @@
 #include "tux_types.h"
 
 #ifdef USE_SIMULATION
-#include "RasteriCEer/lib/gl/inc/IceGLWrapper.h"
+#include "IceGLWrapper.h"
 #else
 #if defined( HAVE_SDL )
 #   include "SDL.h"

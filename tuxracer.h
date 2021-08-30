@@ -102,7 +102,7 @@
 #define HAVE_GETTIMEOFDAY 1
 
 #ifdef USE_SIMULATION
-#include "RasteriCEer/lib/gl/inc/IceGLWrapper.h"
+#include "IceGLWrapper.h"
 #else
 /* OpenGL */
 #include <OpenGL/gl.h>
