@@ -6,9 +6,7 @@
 #include <QTimer>
 #include "IceGL.hpp"
 #include "Renderer.hpp"
-#include "RendererBuckets.hpp"
-#include "VerilatorBusConnector.h"
-#include "softwarerenderer.h"
+#include "VerilatorBusConnector.hpp"
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLabel>

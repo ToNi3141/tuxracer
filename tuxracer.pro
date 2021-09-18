@@ -10,50 +10,57 @@ DEFINES += TUXRACER_NO_ASSERT
 DEFINES += TRACK_TRIANGLES
 
 equals(TARGET, "simulation") {
+# Set here the path to your local verilator installation
+VERILATOR_PATH = /usr/local/Cellar/verilator/4.100/share/verilator
+
+ICEGL_PATH = ../tuxracer/RasteriCEr/lib/gl
+VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/RasteriCEr/unittest/cpp/include
+VERILATOR_CODE_GEN_PATH = ../tuxracer/RasteriCEr/rtl/top/Verilator/obj_dir
+
 CONFIG += qt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT       += core
 DEFINES += USE_SIMULATION
 #DEFINES += SOFTWARE_RENDERER
 #DEFINES += NO_PERSP_CORRECT
-LIBS += ../tuxracer/RasteriCEer/rtl/top/Verilator/obj_dir/verilated.o
-QMAKE_CXXFLAGS += -I../tuxracer/RasteriCEer/lib/gl/ -I../tuxracer/RasteriCEer/qtRasterizer/ \
-        -I/usr/local/Cellar/verilator/4.100/share/verilator/include/ \
-        ../tuxracer/RasteriCEer/rtl/top/Verilator/obj_dir/ \
 
-QMAKE_CFLAGS += -I../tuxracer/RasteriCEer/lib/gl/ -I../tuxracer/RasteriCEer/qtRasterizer/ \
-        -I/usr/local/Cellar/verilator/4.100/share/verilator/include/ \
-        ../tuxracer/RasteriCEer/rtl/top/Verilator/obj_dir/ \
+LIBS += $${VERILATOR_CODE_GEN_PATH}/Vtop__ALL.a
+
+QMAKE_CXXFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
+    -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
+    -I$${VERILATOR_PATH}/include/ \
+    -I$${ICEGL_PATH}/
+
+QMAKE_CFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
+    -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
+    -I$${VERILATOR_PATH}/include/ \
+    -I$${ICEGL_PATH}/
 
 SOURCES += \
     mainwindow.cpp \
-    RasteriCEer/lib/gl/TnL.cpp \
-    RasteriCEer/lib/gl/IceGL.cpp \
-    RasteriCEer/lib/gl/Rasterizer.cpp \
-    RasteriCEer/lib/gl/IceGLWrapper.cpp \
-    RasteriCEer/qtRasterizer/softwarerenderer.cpp \
-    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop.cpp\
-    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop__Syms.cpp\
-    RasteriCEer/rtl/top/Verilator/obj_dir/Vtop__Slow.cpp
+    $${ICEGL_PATH}/TnL.cpp \
+    $${ICEGL_PATH}/IceGL.cpp \
+    $${ICEGL_PATH}/Rasterizer.cpp \
+    $${ICEGL_PATH}/IceGLWrapper.cpp \
+    $${VERILATOR_PATH}/include/verilated.cpp
 
 HEADERS += \
     mainwindow.h \
-    RasteriCEer/lib/gl/DisplayList.hpp \
-    RasteriCEer/lib/gl/IBusConnector.hpp \
-    RasteriCEer/lib/gl/IRenderer.hpp \
-    RasteriCEer/lib/gl/Renderer.hpp \
-    RasteriCEer/lib/gl/RendererBuckets.hpp \
-    RasteriCEer/lib/gl/TnL.hpp \
-    RasteriCEer/lib/gl/Vec.hpp \
-    RasteriCEer/lib/gl/Mat44.hpp \
-    RasteriCEer/lib/gl/Veci.hpp \
-    RasteriCEer/lib/gl/GRamAlloc.hpp \
-    RasteriCEer/lib/gl/IceGL.hpp \
-    RasteriCEer/lib/gl/Rasterizer.hpp \
-    RasteriCEer/lib/gl/IceGLWrapper.h \
-    RasteriCEer/lib/gl/IceGLTypes.h \
-    RasteriCEer/qtRasterizer/softwarerenderer.hpp \
-    RasteriCEer/qtRasterizer/VerilatorBusConnector.h
+    $${ICEGL_PATH}/DisplayList.hpp \
+    $${ICEGL_PATH}/IBusConnector.hpp \
+    $${ICEGL_PATH}/IRenderer.hpp \
+    $${ICEGL_PATH}/Renderer.hpp \
+    $${ICEGL_PATH}/RendererBuckets.hpp \
+    $${ICEGL_PATH}/TnL.hpp \
+    $${ICEGL_PATH}/Vec.hpp \
+    $${ICEGL_PATH}/Mat44.hpp \
+    $${ICEGL_PATH}/Veci.hpp \
+    $${ICEGL_PATH}/GRamAlloc.hpp \
+    $${ICEGL_PATH}/IceGL.hpp \
+    $${ICEGL_PATH}/Rasterizer.hpp \
+    $${ICEGL_PATH}/IceGLWrapper.h \
+    $${ICEGL_PATH}/IceGLTypes.h \
+    $${VERILATOR_BUS_CONNECTOR_PATH}/VerilatorBusConnector.hpp
 }
 
 equals(TARGET, "glut") {
