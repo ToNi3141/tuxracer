@@ -8,6 +8,7 @@ The port is not complete. It might be a bit hard to get into a 3D scene because 
 git clone https://github.com/ToNi3141/tuxracer.git
 cd tuxracer
 git checkout RasteriCErPort
+git submodule init
 git submodule update
 
 cd RasteriCEr/rtl/top/Verilator
