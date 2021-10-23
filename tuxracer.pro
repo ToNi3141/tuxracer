@@ -11,7 +11,7 @@ DEFINES += TRACK_TRIANGLES
 
 equals(TARGET, "simulation") {
 # Set here the path to your local verilator installation
-VERILATOR_PATH = /usr/local/Cellar/verilator/4.100/share/verilator
+VERILATOR_PATH = /usr/local/Cellar/verilator/4.200/share/verilator
 
 ICEGL_PATH = ../tuxracer/RasteriCEr/lib/gl
 VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/RasteriCEr/unittest/cpp/include
@@ -50,12 +50,10 @@ HEADERS += \
     $${ICEGL_PATH}/IBusConnector.hpp \
     $${ICEGL_PATH}/IRenderer.hpp \
     $${ICEGL_PATH}/Renderer.hpp \
-    $${ICEGL_PATH}/RendererBuckets.hpp \
     $${ICEGL_PATH}/TnL.hpp \
     $${ICEGL_PATH}/Vec.hpp \
     $${ICEGL_PATH}/Mat44.hpp \
     $${ICEGL_PATH}/Veci.hpp \
-    $${ICEGL_PATH}/GRamAlloc.hpp \
     $${ICEGL_PATH}/IceGL.hpp \
     $${ICEGL_PATH}/Rasterizer.hpp \
     $${ICEGL_PATH}/IceGLWrapper.h \
