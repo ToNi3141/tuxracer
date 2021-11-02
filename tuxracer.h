@@ -101,7 +101,7 @@
 #define VERSION "1.2.3"
 #define HAVE_GETTIMEOFDAY 1
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
 #include "IceGLWrapper.h"
 #else
 /* OpenGL */

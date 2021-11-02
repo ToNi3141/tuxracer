@@ -1,3 +1,3 @@
-[submodule "RasteriCEr"]
-	path = RasteriCEr
-	url = https://github.com/ToNi3141/RasteriCEr.git
+[submodule "Rasterix"]
+	path = Rasterix
+	url = https://github.com/ToNi3141/Rasterix.git

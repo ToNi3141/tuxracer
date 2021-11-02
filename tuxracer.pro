@@ -1,5 +1,6 @@
 #TARGET = glut
-TARGET = simulation
+#TARGET = simulation
+TARGET = hardware
 TEMPLATE = app
 CONFIG += console c++17
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
@@ -9,40 +10,76 @@ LIBS += -framework Tcl
 DEFINES += TUXRACER_NO_ASSERT
 DEFINES += TRACK_TRIANGLES
 
+VAL = 0
+equals(TARGET, "hardware") {
+    VAL = 1
+}
+
 equals(TARGET, "simulation") {
+    VAL = 1
+}
+
+greaterThan(VAL, 0) {
 # Set here the path to your local verilator installation
 VERILATOR_PATH = /usr/local/Cellar/verilator/4.200/share/verilator
 
-ICEGL_PATH = ../tuxracer/RasteriCEr/lib/gl
-VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/RasteriCEr/unittest/cpp/include
-VERILATOR_CODE_GEN_PATH = ../tuxracer/RasteriCEr/rtl/top/Verilator/obj_dir
+ICEGL_PATH = ../tuxracer/Rasterix/lib/gl
+VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
+VERILATOR_CODE_GEN_PATH = ../tuxracer/Rasterix/rtl/top/Verilator/obj_dir
+FT2232_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
 
 CONFIG += qt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QT       += core
-DEFINES += USE_SIMULATION
+
 #DEFINES += SOFTWARE_RENDERER
 #DEFINES += NO_PERSP_CORRECT
 
-LIBS += $${VERILATOR_CODE_GEN_PATH}/Vtop__ALL.a
+DEFINES += USE_ICEGL
 
-QMAKE_CXXFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
-    -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
-    -I$${VERILATOR_PATH}/include/ \
-    -I$${ICEGL_PATH}/
+equals(TARGET, "simulation") {
+    DEFINES += USE_SIMULATION
 
-QMAKE_CFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
-    -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
-    -I$${VERILATOR_PATH}/include/ \
-    -I$${ICEGL_PATH}/
+    LIBS += $${VERILATOR_CODE_GEN_PATH}/Vtop__ALL.a
+
+    QMAKE_CXXFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
+        -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
+        -I$${VERILATOR_PATH}/include/
+
+    QMAKE_CFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
+        -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
+        -I$${VERILATOR_PATH}/include/
+
+    SOURCES += $${VERILATOR_PATH}/include/verilated.cpp
+
+    HEADERS += $${VERILATOR_BUS_CONNECTOR_PATH}/VerilatorBusConnector.hpp
+}
+
+equals(TARGET, "hardware") {
+    DEFINES += USE_HARDWARE
+
+    LIBS += /usr/local/lib/libftd2xx.dylib
+    LIBS += /usr/local/lib/libusb-1.0.dylib
+
+    QMAKE_CXXFLAGS += -I/usr/local/include/ \
+        -I$${FT2232_BUS_CONNECTOR_PATH}/
+
+    QMAKE_CFLAGS += -I/usr/local/include/ \
+        -I$${FT2232_BUS_CONNECTOR_PATH}/
+
+    HEADERS += $${FT2232_BUS_CONNECTOR_PATH}/FT2232HBusConnector.hpp
+}
+
+QMAKE_CXXFLAGS += -I$${ICEGL_PATH}/
+
+QMAKE_CFLAGS += -I$${ICEGL_PATH}/
 
 SOURCES += \
     mainwindow.cpp \
     $${ICEGL_PATH}/TnL.cpp \
     $${ICEGL_PATH}/IceGL.cpp \
     $${ICEGL_PATH}/Rasterizer.cpp \
-    $${ICEGL_PATH}/IceGLWrapper.cpp \
-    $${VERILATOR_PATH}/include/verilated.cpp
+    $${ICEGL_PATH}/IceGLWrapper.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -57,15 +94,14 @@ HEADERS += \
     $${ICEGL_PATH}/IceGL.hpp \
     $${ICEGL_PATH}/Rasterizer.hpp \
     $${ICEGL_PATH}/IceGLWrapper.h \
-    $${ICEGL_PATH}/IceGLTypes.h \
-    $${VERILATOR_BUS_CONNECTOR_PATH}/VerilatorBusConnector.hpp
+    $${ICEGL_PATH}/IceGLTypes.h
 }
 
 equals(TARGET, "glut") {
-DEFINES += HAVE_GLUT
-LIBS += -framework OpenGL
-LIBS += -framework GLUT
-CONFIG += opengl
+    DEFINES += HAVE_GLUT
+    LIBS += -framework OpenGL
+    LIBS += -framework GLUT
+    CONFIG += opengl
 }
 
 
@@ -218,4 +254,3 @@ HEADERS += \
     view.h \
     viewfrustum.h \
     winsys.h
-

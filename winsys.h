@@ -22,7 +22,7 @@
 #include "tuxracer.h"
 #include "tux_types.h"
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
 #include "IceGLWrapper.h"
 #else
 #if defined( HAVE_SDL )
@@ -32,7 +32,7 @@
 #else
 #   error "Neither SDL nor GLUT are present."
 #endif
-#endif // USE_SIMULATION
+#endif // USE_ICEGL
 
 #ifdef __cplusplus
 extern "C"
@@ -217,7 +217,7 @@ typedef enum {
 #endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
 typedef enum {
     WSK_NOT_AVAIL = 0,
 
@@ -296,7 +296,7 @@ typedef enum {
     WS_MOUSE_UP = 0x131
 } winsys_button_state_t;
 
-#endif // USE_SIMULATION
+#endif // USE_ICEGL
 
 typedef void (*winsys_display_func_t)();
 typedef void (*winsys_idle_func_t)();

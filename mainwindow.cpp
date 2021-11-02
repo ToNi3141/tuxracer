@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::newFrame);
     label->setPixmap(QPixmap::fromImage(m_image));
-    m_timer.setInterval(50);
+    m_timer.setInterval(10);
     m_timer.setSingleShot(false);
     m_timer.start();
 }
@@ -41,6 +41,7 @@ void MainWindow::newFrame()
 
     m_ogl.commit();
 
+#if USE_SIMULATION
     for (uint32_t i = 0; i < RESOLUTION_H; i++)
     {
         for (uint32_t j = 0; j < RESOLUTION_W; j++)
@@ -52,6 +53,7 @@ void MainWindow::newFrame()
         }
     }
     label->setPixmap(QPixmap::fromImage(m_image.scaled(m_image.width()*PREVIEW_WINDOW_SCALING, m_image.height()*PREVIEW_WINDOW_SCALING)));
+#endif
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev)
@@ -66,7 +68,11 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
         if (key == Qt::Key_Left)
             key = WSK_LEFT, special = true;
         if (key == Qt::Key_Right)
-            key = WSK_RIGHT, special = true;;
+            key = WSK_RIGHT, special = true;
+        if (key == Qt::Key_Up)
+            key = WSK_UP, special = true;
+        if (key == Qt::Key_Down)
+            key = WSK_DOWN, special = true;
         (*keyboard_func)( key, special ? True : False, False, 0, 0 );
     }
 }
@@ -82,7 +88,11 @@ void MainWindow::keyReleaseEvent(QKeyEvent *ev) {
         if (key == Qt::Key_Left)
             key = WSK_LEFT, special = true;
         if (key == Qt::Key_Right)
-            key = WSK_RIGHT, special = true;;
+            key = WSK_RIGHT, special = true;
+        if (key == Qt::Key_Up)
+            key = WSK_UP, special = true;
+        if (key == Qt::Key_Down)
+            key = WSK_DOWN, special = true;
         (*keyboard_func)( key, special ? True : False, True, 0, 0 );
     }
 }

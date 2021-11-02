@@ -768,7 +768,7 @@ void winsys_exit( int code )
 #endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
 
 #undef min
 #undef max

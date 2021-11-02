@@ -114,7 +114,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
     max_texture_size = 128;
     // The RasteriCEr does not support tex parameters right now
 #else
@@ -148,7 +148,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	/* In the case of large- or small-aspect ratio textures, this
            could end up using *more* space... oh well. */
 
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
     char* tmpNewData = newdata;
     char* tmpOldData = texImage->data;
     uint32_t indexNew = 0;
@@ -189,7 +189,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	texImage->sizeX = max_texture_size;
 	texImage->sizeY = max_texture_size;
     }
-#ifdef USE_SIMULATION
+#ifdef USE_ICEGL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage->sizeX, texImage->sizeY, 0, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texImage->data);
 #else
         gluBuild2DMipmaps( GL_TEXTURE_2D, texImage->sizeZ, texImage->sizeX,
