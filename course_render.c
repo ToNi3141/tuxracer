@@ -704,7 +704,7 @@ void draw_fog_plane()
 
     // TODO: This was using GL_QUAD_STRIP. It seems to work right now
     // but it should be buggy. Probably the bug is not visible
-    glBegin( GL_TRIANGLE_STRIP ); // GL_QUAD_STRIP
+    glBegin( GL_QUAD_STRIP );
 
     glVertex3f( bottom_left_pt.x, bottom_left_pt.y, bottom_left_pt.z );
     glVertex3f( bottom_right_pt.x, bottom_right_pt.y, bottom_right_pt.z );

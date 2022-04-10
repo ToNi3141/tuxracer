@@ -25,7 +25,7 @@ extern "C"
 #ifndef _RENDER_UTIL_H_
 #define _RENDER_UTIL_H_
 
-#define NEAR_CLIP_DIST 0.51
+#define NEAR_CLIP_DIST 0.1
 
 extern const colour_t white;
 extern const colour_t grey;
