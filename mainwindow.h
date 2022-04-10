@@ -11,7 +11,8 @@
 #endif
 #if USE_HARDWARE
 #undef VOID // Undef void because it is defined in the tcl.h and there is a typedef in WinTypes.h (which is used for the FT2232 library)
-#include "FT2232HBusConnector.hpp"
+//#include "FT2232HBusConnector.hpp"
+#include "FT60XBusConnector.hpp"
 #endif
 #include <QWidget>
 #include <QHBoxLayout>
@@ -93,22 +94,25 @@ private:
 #endif
 #if USE_SIMULATION
 public:
-    static const uint32_t RESOLUTION_W = 640;
-    static const uint32_t RESOLUTION_H = 480;
+    static const uint32_t RESOLUTION_W = 480;
+    static const uint32_t RESOLUTION_H = 320;
 private:
     uint16_t m_framebuffer[RESOLUTION_W*RESOLUTION_H];
     uint16_t m_zbuffer[RESOLUTION_W*RESOLUTION_H];
 
     VerilatorBusConnector<uint64_t> m_busConnector{reinterpret_cast<uint64_t*>(m_framebuffer), RESOLUTION_W, RESOLUTION_H};
-    Renderer<256*1024, 4, RESOLUTION_H / 4, 32> m_renderer{m_busConnector};
+    Renderer<1024*1024, 10, RESOLUTION_H / 10, 64> m_renderer{m_busConnector};
 #endif
 #if USE_HARDWARE
 public:
-    static const uint32_t RESOLUTION_W = 480;
-    static const uint32_t RESOLUTION_H = 320;
+//    static const uint32_t RESOLUTION_H = 320;
+//    static const uint32_t RESOLUTION_W = 480;
+
+    static const uint32_t RESOLUTION_H = 600;
+    static const uint32_t RESOLUTION_W = 1024;
 private:
-    FT2232HBusConnector m_busConnector;
-    Renderer<512*1024, 5, RESOLUTION_H / 5, 128, 256> m_renderer{m_busConnector};
+    FT60XBusConnector m_busConnector;
+    Renderer<1024*1024, 5, RESOLUTION_H / 5, 128, 256> m_renderer{m_busConnector};
 #endif
     IceGL m_ogl{m_renderer};
 };

@@ -26,7 +26,9 @@ VERILATOR_PATH = /usr/local/Cellar/verilator/4.200/share/verilator
 ICEGL_PATH = ../tuxracer/Rasterix/lib/gl
 VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
 VERILATOR_CODE_GEN_PATH = ../tuxracer/Rasterix/rtl/top/Verilator/obj_dir
-FT2232_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
+FT2232H_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
+FT60X_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver
+FT60X_LIB_PATH = ../tuxracer/Rasterix/lib/ftd3xx/osx
 
 CONFIG += qt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -58,16 +60,24 @@ equals(TARGET, "simulation") {
 equals(TARGET, "hardware") {
     DEFINES += USE_HARDWARE
 
-    LIBS += /usr/local/lib/libftd2xx.dylib
+#    LIBS += /usr/local/lib/libftd2xx.dylib
     LIBS += /usr/local/lib/libusb-1.0.dylib
+    LIBS += $${FT60X_LIB_PATH}/libftd3xx-static.a
 
-    QMAKE_CXXFLAGS += -I/usr/local/include/ \
-        -I$${FT2232_BUS_CONNECTOR_PATH}/
+#    QMAKE_CXXFLAGS += -I/usr/local/include/ \
+#        -I$${FT2232H_BUS_CONNECTOR_PATH}/
 
-    QMAKE_CFLAGS += -I/usr/local/include/ \
-        -I$${FT2232_BUS_CONNECTOR_PATH}/
+#    QMAKE_CFLAGS += -I/usr/local/include/ \
+#        -I$${FT2232H_BUS_CONNECTOR_PATH}/
 
-    HEADERS += $${FT2232_BUS_CONNECTOR_PATH}/FT2232HBusConnector.hpp
+    QMAKE_CXXFLAGS += -I$${FT60X_BUS_CONNECTOR_PATH}/ \
+        -I$${FT60X_LIB_PATH}/
+
+    QMAKE_CFLAGS += -I$${FT60X_BUS_CONNECTOR_PATH}/\
+        -I$${FT60X_LIB_PATH}/
+
+    # HEADERS += $${FT2232H_BUS_CONNECTOR_PATH}/FT2232HBusConnector.hpp
+    HEADERS += $${FT60X_BUS_CONNECTOR_PATH}/FT60XBusConnector.hpp
 }
 
 QMAKE_CXXFLAGS += -I$${ICEGL_PATH}/
