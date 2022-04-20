@@ -115,6 +115,14 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 #ifdef USE_ICEGL
+    // Produces texture errors on the course
+//    if ( repeatable ) {
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+//    } else {
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+//    }
     max_texture_size = 128;
     // The RasteriCEr does not support tex parameters right now
 #else
@@ -151,29 +159,30 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 #ifdef USE_ICEGL
     char* tmpNewData = newdata;
     char* tmpOldData = texImage->data;
+    uint32_t scaleFactor = max(texImage->sizeX, texImage->sizeY);
+    scaleFactor /= max_texture_size;
+    // tree.rgb has a size of 256x255 is scaled down to 128x127 and is not supported. Therefore we ignore this pixel and round to the next bigger value which is then 128x128.
+    uint32_t xScale = ((float)(texImage->sizeX) / scaleFactor) + .5;
+    uint32_t yScale = ((float)(texImage->sizeY) / scaleFactor) + .5;
+    if (xScale > 128 || yScale > 128)
+        printf("%d, %d \n", xScale, yScale);
     uint32_t indexNew = 0;
     uint32_t indexOld = 0;
-    memset(newdata, 0, 128*128*texImage->sizeZ);
-        for (int y = 0; y < 128; y++)
+    for (int y = 0; y < yScale; y++)
+    {
+        for (int x = 0; x < xScale; x++) 
         {
-            for (int x = 0; x < 128; x++)
+            for (int i = 0; i < texImage->sizeZ; i++)
             {
-                for (int i = 0; i < texImage->sizeZ; i++)
-                {
-                    tmpNewData[indexNew] = tmpOldData[indexOld];
-                    indexNew++;
-                    indexOld++;
-                }
-                if (texImage->sizeX > 256)
-                    indexOld += texImage->sizeZ * 3;
-                else if (texImage->sizeX > 128)
-                    indexOld+=texImage->sizeZ;
+                tmpNewData[indexNew] = tmpOldData[indexOld];
+                indexNew++;
+                indexOld++;
             }
-            if (texImage->sizeY > 256)
-                indexOld += texImage->sizeX * texImage->sizeZ * 3;
-            else if (texImage->sizeY > 128)
-                indexOld += texImage->sizeX * texImage->sizeZ;
+            indexOld += (scaleFactor - 1) * texImage->sizeZ;
         }
+
+        indexOld += texImage->sizeX * (scaleFactor - 1) * texImage->sizeZ;
+    }
 #else
     	gluScaleImage( texImage->sizeZ == 3 ? GL_RGB : GL_RGBA,
     		       texImage->sizeX, texImage->sizeY,
@@ -186,8 +195,8 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
 	free( texImage->data );
 	texImage->data = (unsigned char*) newdata;
-	texImage->sizeX = max_texture_size;
-	texImage->sizeY = max_texture_size;
+	texImage->sizeX = xScale;
+	texImage->sizeY = yScale;
     }
 #ifdef USE_ICEGL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage->sizeX, texImage->sizeY, 0, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texImage->data);
