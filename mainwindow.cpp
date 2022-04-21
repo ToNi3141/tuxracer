@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::newFrame);
     label->setPixmap(QPixmap::fromImage(m_image));
-    m_timer.setInterval(10);
+    m_timer.setInterval(33);
     m_timer.setSingleShot(false);
     m_timer.start();
 }
@@ -64,6 +64,8 @@ void MainWindow::keyPressEvent(QKeyEvent *ev)
         if (key == Qt::Key_Escape)
             key = 0x1b;
         if (key == Qt::Key_Enter)
+            key = 0xd;
+        if (key == Qt::Key_Return)
             key = 0xd;
         if (key == Qt::Key_Left)
             key = WSK_LEFT, special = true;

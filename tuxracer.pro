@@ -1,6 +1,6 @@
 #TARGET = glut
-#TARGET = simulation
-TARGET = hardware
+TARGET = simulation
+#TARGET = hardware
 TEMPLATE = app
 CONFIG += console c++17
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
@@ -21,7 +21,7 @@ equals(TARGET, "simulation") {
 
 greaterThan(VAL, 0) {
 # Set here the path to your local verilator installation
-VERILATOR_PATH = /usr/local/Cellar/verilator/4.200/share/verilator
+VERILATOR_PATH = /opt/homebrew/Cellar/verilator/4.220/share/verilator
 
 ICEGL_PATH = ../tuxracer/Rasterix/lib/gl
 VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
@@ -61,7 +61,7 @@ equals(TARGET, "hardware") {
     DEFINES += USE_HARDWARE
 
 #    LIBS += /usr/local/lib/libftd2xx.dylib
-    LIBS += /usr/local/lib/libusb-1.0.dylib
+    LIBS += /usr/local/homebrew/Cellar/libusb/1.0.26/lib/libusb-1.0.dylib
     LIBS += $${FT60X_LIB_PATH}/libftd3xx-static.a
 
 #    QMAKE_CXXFLAGS += -I/usr/local/include/ \

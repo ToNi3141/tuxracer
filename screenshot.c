@@ -35,6 +35,7 @@ void screenshot()
 } 
 
 char* take_screenshot ( char* filename ) {
+#ifndef USE_ICEGL
     Pic *ppmFile;
     Pic_Pixel *scanline;
     int i, viewport[4];
@@ -46,8 +47,8 @@ char* take_screenshot ( char* filename ) {
     glReadBuffer( GL_FRONT );
 
     for (i=viewport[3]-1; i>=0; i--) {
-        glReadPixels(viewport[0], viewport[1]+i, viewport[2], 1, GL_RGB, 
-		     GL_UNSIGNED_BYTE, scanline);
+        glReadPixels(viewport[0], viewport[1]+i, viewport[2], 1, GL_RGB,
+             GL_UNSIGNED_BYTE, scanline);
 
 	/* Make sure write was successful */
         if (!PicWriteLine(ppmFile, scanline)) {
@@ -59,5 +60,6 @@ char* take_screenshot ( char* filename ) {
     PicClose( ppmFile );
 
     PixelFree(scanline);
+#endif
     return (char *)0;
 }

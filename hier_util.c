@@ -184,7 +184,7 @@ static GLuint get_sphere_display_list( int divisions ) {
 
     if ( display_lists[idx] == 0 ) {
 	/* Initialize the sphere display list */
-	display_lists[idx] = glGenLists(1);
+//  display_lists[idx] = glGenLists(1);
 //	glNewList( display_lists[idx], GL_COMPILE );
 	draw_sphere( divisions );
 //	glEndList();
