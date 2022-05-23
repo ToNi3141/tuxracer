@@ -114,31 +114,18 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-#ifdef USE_ICEGL
-    // Produces texture errors on the course
-//    if ( repeatable ) {
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-//    } else {
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-//    }
-    max_texture_size = 128;
-    // The RasteriCEr does not support tex parameters right now
-#else
-        if ( repeatable ) {
-    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-    	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-        } else {
+       if ( repeatable ) {
+   	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+   	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+       } else {
     	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
     	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-        }
+       }
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                         get_min_filter() );
+                        get_min_filter() );
         /* Check if we need to scale image */
         glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
-#endif
 
     if ( texImage->sizeX > max_texture_size ||
 	 texImage->sizeY > max_texture_size ) 
@@ -156,15 +143,17 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	/* In the case of large- or small-aspect ratio textures, this
            could end up using *more* space... oh well. */
 
-#ifdef USE_ICEGL
-    char* tmpNewData = newdata;
-    char* tmpOldData = texImage->data;
     uint32_t scaleFactor = max(texImage->sizeX, texImage->sizeY);
     scaleFactor /= max_texture_size;
     // tree.rgb has a size of 256x255 is scaled down to 128x127 and is not supported. Therefore we ignore this pixel and round to the next bigger value which is then 128x128.
+
     uint32_t xScale = ((float)(texImage->sizeX) / scaleFactor) + .5;
     uint32_t yScale = ((float)(texImage->sizeY) / scaleFactor) + .5;
-    if (xScale > 128 || yScale > 128)
+#ifdef USE_ICEGL
+    char* tmpNewData = newdata;
+    char* tmpOldData = texImage->data;
+
+    if (xScale > max_texture_size || yScale > max_texture_size)
         printf("%d, %d \n", xScale, yScale);
     uint32_t indexNew = 0;
     uint32_t indexOld = 0;
