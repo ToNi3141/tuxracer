@@ -24,7 +24,7 @@ greaterThan(VAL, 0) {
 VERILATOR_PATH = /opt/homebrew/Cellar/verilator/4.220/share/verilator
 
 ICEGL_PATH = ../tuxracer/Rasterix/lib/gl
-VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
+VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver
 VERILATOR_CODE_GEN_PATH = ../tuxracer/Rasterix/rtl/top/Verilator/obj_dir
 FT2232H_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
 FT60X_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver
@@ -38,6 +38,7 @@ QT       += core
 #DEFINES += NO_PERSP_CORRECT
 
 DEFINES += USE_ICEGL
+VL_THREADED += 1
 
 equals(TARGET, "simulation") {
     DEFINES += USE_SIMULATION
@@ -86,9 +87,13 @@ QMAKE_CFLAGS += -I$${ICEGL_PATH}/
 
 SOURCES += \
     mainwindow.cpp \
-    $${ICEGL_PATH}/TnL.cpp \
+    $${ICEGL_PATH}/VertexPipeline.cpp \
     $${ICEGL_PATH}/IceGL.cpp \
     $${ICEGL_PATH}/Rasterizer.cpp \
+    $${ICEGL_PATH}/Clipper.cpp \
+    $${ICEGL_PATH}/Lighting.cpp \
+    $${ICEGL_PATH}/TexGen.cpp \
+    $${ICEGL_PATH}/RenderObj.cpp \
     $${ICEGL_PATH}/IceGLWrapper.cpp
 
 HEADERS += \
@@ -97,13 +102,17 @@ HEADERS += \
     $${ICEGL_PATH}/IBusConnector.hpp \
     $${ICEGL_PATH}/IRenderer.hpp \
     $${ICEGL_PATH}/Renderer.hpp \
-    $${ICEGL_PATH}/TnL.hpp \
+    $${ICEGL_PATH}/VertexPipeline.hpp \
     $${ICEGL_PATH}/Vec.hpp \
     $${ICEGL_PATH}/Mat44.hpp \
     $${ICEGL_PATH}/Veci.hpp \
     $${ICEGL_PATH}/IceGL.hpp \
     $${ICEGL_PATH}/Rasterizer.hpp \
     $${ICEGL_PATH}/IceGLWrapper.h \
+    $${ICEGL_PATH}/Clipper.hpp \
+    $${ICEGL_PATH}/Lighting.hpp \
+    $${ICEGL_PATH}/TexGen.hpp \
+    $${ICEGL_PATH}/RenderObj.hpp \
     $${ICEGL_PATH}/IceGLTypes.h
 }
 

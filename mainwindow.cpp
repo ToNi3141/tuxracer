@@ -49,6 +49,9 @@ void MainWindow::newFrame()
             uint8_t r = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 12) & 0xf) << 4;
             uint8_t g = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 8) & 0xf) << 4;
             uint8_t b = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 4) & 0xf) << 4;
+            // uint8_t r = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 24) & 0xff) << 0;
+            // uint8_t g = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 16) & 0xff) << 0;
+            // uint8_t b = ((m_framebuffer[(i*RESOLUTION_W)+j] >> 8) & 0xff) << 0;
             m_image.setPixelColor(QPoint(j, i), QColor(r, g, b));
         }
     }

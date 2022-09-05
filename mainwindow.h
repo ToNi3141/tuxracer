@@ -94,8 +94,8 @@ private:
 #endif
 #if USE_SIMULATION
 public:
-    static const uint32_t RESOLUTION_W = 480;
-    static const uint32_t RESOLUTION_H = 320;
+    static const uint32_t RESOLUTION_W = 640;
+    static const uint32_t RESOLUTION_H = 480;
 private:
     uint16_t m_framebuffer[RESOLUTION_W*RESOLUTION_H];
     uint16_t m_zbuffer[RESOLUTION_W*RESOLUTION_H];
