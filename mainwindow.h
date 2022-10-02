@@ -114,7 +114,6 @@ private:
     FT60XBusConnector m_busConnector;
     Renderer<1024*1024, 5, RESOLUTION_H / 5, 128, 256> m_renderer{m_busConnector};
 #endif
-    IceGL m_ogl{m_renderer};
 };
 
 #endif // MAINWINDOW_H

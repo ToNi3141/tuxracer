@@ -102,7 +102,8 @@
 #define HAVE_GETTIMEOFDAY 1
 
 #ifdef USE_ICEGL
-#include "IceGLWrapper.h"
+#include "gl.h"
+#include "glu.h"
 #else
 /* OpenGL */
 #include <OpenGL/gl.h>

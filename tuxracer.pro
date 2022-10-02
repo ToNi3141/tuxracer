@@ -94,7 +94,9 @@ SOURCES += \
     $${ICEGL_PATH}/Lighting.cpp \
     $${ICEGL_PATH}/TexGen.cpp \
     $${ICEGL_PATH}/RenderObj.cpp \
-    $${ICEGL_PATH}/IceGLWrapper.cpp
+    $${ICEGL_PATH}/PixelPipeline.cpp \
+    $${ICEGL_PATH}/gl.cpp \
+    $${ICEGL_PATH}/glu.cpp
 
 HEADERS += \
     mainwindow.h \
@@ -108,13 +110,21 @@ HEADERS += \
     $${ICEGL_PATH}/Veci.hpp \
     $${ICEGL_PATH}/IceGL.hpp \
     $${ICEGL_PATH}/Rasterizer.hpp \
-    $${ICEGL_PATH}/IceGLWrapper.h \
+    $${ICEGL_PATH}/gl.h \
+    $${ICEGL_PATH}/glu.h \
     $${ICEGL_PATH}/Clipper.hpp \
     $${ICEGL_PATH}/Lighting.hpp \
     $${ICEGL_PATH}/TexGen.hpp \
     $${ICEGL_PATH}/RenderObj.hpp \
-    $${ICEGL_PATH}/IceGLTypes.h
+    $${ICEGL_PATH}/PixelPipeline.hpp
 }
+
+DEFINES += SPDLOG_ACTIVE_LEVEL=0
+QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
+QMAKE_CFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
+
+QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
+QMAKE_CFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
 
 equals(TARGET, "glut") {
     DEFINES += HAVE_GLUT

@@ -23,7 +23,8 @@
 #include "tux_types.h"
 
 #ifdef USE_ICEGL
-#include "IceGLWrapper.h"
+#include "gl.h"
+#include "glu.h"
 #else
 #if defined( HAVE_SDL )
 #   include "SDL.h"

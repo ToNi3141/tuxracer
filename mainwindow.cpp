@@ -7,7 +7,6 @@
 #include "QTime"
 #include <QThread>
 #include <QFile>
-#include "IceGLWrapper.h"
 #include <QKeyEvent>
 //#include "softwarerenderer.h"
 #include "winsys.h"
@@ -21,7 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_image(RESOLUTION_W, RESOLUTION_H, QImage::Format_RGB888)
 {
-    initIceGlCWrapper(&m_ogl);
+    IceGL::createInstance(m_renderer);
+
     setupUi(this);
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::newFrame);
@@ -39,7 +39,7 @@ void MainWindow::newFrame()
     if (idle_func)
         idle_func();
 
-    m_ogl.commit();
+    IceGL::getInstance().commit();
 
 #if USE_SIMULATION
     for (uint32_t i = 0; i < RESOLUTION_H; i++)
