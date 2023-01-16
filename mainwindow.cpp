@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_image(RESOLUTION_W, RESOLUTION_H, QImage::Format_RGB888)
 {
-    IceGL::createInstance(m_renderer);
+    rr::IceGL::createInstance(m_renderer);
 
     setupUi(this);
 
@@ -39,9 +39,14 @@ void MainWindow::newFrame()
     if (idle_func)
         idle_func();
 
-    IceGL::getInstance().commit();
+    rr::IceGL::getInstance().commit();
 
 #if USE_SIMULATION
+    // To prevent tearing in the simulation, wait till the last line is rendered and wait till the last chunk from the framebuffer was transferred.
+    m_renderer.blockTillRenderingFinished();
+    m_busConnector.waitForLastFramebufferChunk();
+
+    // Copy picture from internal framebuffer into the QImage.
     for (uint32_t i = 0; i < RESOLUTION_H; i++)
     {
         for (uint32_t j = 0; j < RESOLUTION_W; j++)

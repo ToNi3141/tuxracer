@@ -24,11 +24,11 @@ greaterThan(VAL, 0) {
 VERILATOR_PATH = /opt/homebrew/Cellar/verilator/4.220/share/verilator
 
 ICEGL_PATH = ../tuxracer/Rasterix/lib/gl
-VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver
+VERILATOR_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver/verilator
 VERILATOR_CODE_GEN_PATH = ../tuxracer/Rasterix/rtl/top/Verilator/obj_dir
 FT2232H_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/unittest/cpp/include
-FT60X_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver
-FT60X_LIB_PATH = ../tuxracer/Rasterix/lib/ftd3xx/osx
+FT60X_BUS_CONNECTOR_PATH = ../tuxracer/Rasterix/lib/driver/ft60x
+FT60X_LIB_PATH = ../tuxracer/Rasterix/lib/driver/ft60x/ftd3xx/osx
 
 CONFIG += qt
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -79,6 +79,8 @@ equals(TARGET, "hardware") {
 
     # HEADERS += $${FT2232H_BUS_CONNECTOR_PATH}/FT2232HBusConnector.hpp
     HEADERS += $${FT60X_BUS_CONNECTOR_PATH}/FT60XBusConnector.hpp
+
+    SOURCES += $${FT60X_BUS_CONNECTOR_PATH}/FT60XBusConnector.cpp
 }
 
 QMAKE_CXXFLAGS += -I$${ICEGL_PATH}/
@@ -101,6 +103,7 @@ SOURCES += \
 HEADERS += \
     mainwindow.h \
     $${ICEGL_PATH}/DisplayList.hpp \
+    $${ICEGL_PATH}/DisplayListAssembler.hpp \
     $${ICEGL_PATH}/IBusConnector.hpp \
     $${ICEGL_PATH}/IRenderer.hpp \
     $${ICEGL_PATH}/Renderer.hpp \
@@ -119,10 +122,10 @@ HEADERS += \
     $${ICEGL_PATH}/PixelPipeline.hpp
 }
 
-DEFINES += SPDLOG_ACTIVE_LEVEL=0
-QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
-QMAKE_CFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
+QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/span/include/
+QMAKE_CFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/span/include/
 
+DEFINES += SPDLOG_ACTIVE_LEVEL=5
 QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
 QMAKE_CFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/spdlog-1.10.0/include/
 
