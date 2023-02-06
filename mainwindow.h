@@ -6,6 +6,8 @@
 #include <QTimer>
 #include "IceGL.hpp"
 #include "Renderer.hpp"
+#include "RenderConfigs.hpp"
+#include "RendererMemoryOptimized.hpp"
 #if USE_SIMULATION
 #include "VerilatorBusConnector.hpp"
 #endif
@@ -84,14 +86,6 @@ private:
     QTimer m_timer;
     QImage m_image;
 
-
-#ifdef SOFTWARE_RENDERER
-public:
-    static const uint32_t RESOLUTION_W = 480;
-    static const uint32_t RESOLUTION_H = 320;
-private:
-    rr::SoftwareRenderer m_renderer{m_framebuffer, m_zbuffer, RESOLUTION_W, RESOLUTION_H};
-#endif
 #if USE_SIMULATION
 public:
     static const uint32_t RESOLUTION_W = 640;
@@ -101,7 +95,7 @@ private:
     uint16_t m_zbuffer[RESOLUTION_W*RESOLUTION_H];
 
     rr::VerilatorBusConnector<uint64_t> m_busConnector{reinterpret_cast<uint64_t*>(m_framebuffer), RESOLUTION_W, RESOLUTION_H};
-    rr::Renderer<1024*1024, 10, RESOLUTION_H / 10, 64, 1024> m_renderer{m_busConnector};
+    rr::Renderer<rr::RenderConfigSimulation> m_renderer{m_busConnector};
 #endif
 #if USE_HARDWARE
 public:
@@ -112,7 +106,7 @@ public:
     static const uint32_t RESOLUTION_W = 1024;
 private:
     rr::FT60XBusConnector m_busConnector;
-    rr::Renderer<1024*1024, 5, RESOLUTION_H / 5, 128, 1024> m_renderer{m_busConnector};
+    rr::Renderer<rr::RenderConfigRasterixNexys> m_renderer{m_busConnector};
 #endif
 };
 

@@ -1,14 +1,15 @@
 #TARGET = glut
-TARGET = simulation
-#TARGET = hardware
+#TARGET = simulation
+TARGET = hardware
 TEMPLATE = app
-CONFIG += console c++17
+CONFIG += console c++2a
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
 CONFIG -= app_bundle
 
 LIBS += -framework Tcl
 DEFINES += TUXRACER_NO_ASSERT
 DEFINES += TRACK_TRIANGLES
+DEFINES += USE_STENCIL_BUFFER
 
 VAL = 0
 equals(TARGET, "hardware") {
@@ -89,37 +90,13 @@ QMAKE_CFLAGS += -I$${ICEGL_PATH}/
 
 SOURCES += \
     mainwindow.cpp \
-    $${ICEGL_PATH}/VertexPipeline.cpp \
-    $${ICEGL_PATH}/IceGL.cpp \
-    $${ICEGL_PATH}/Rasterizer.cpp \
-    $${ICEGL_PATH}/Clipper.cpp \
-    $${ICEGL_PATH}/Lighting.cpp \
-    $${ICEGL_PATH}/TexGen.cpp \
-    $${ICEGL_PATH}/RenderObj.cpp \
-    $${ICEGL_PATH}/PixelPipeline.cpp \
-    $${ICEGL_PATH}/gl.cpp \
-    $${ICEGL_PATH}/glu.cpp
+    $${ICEGL_PATH}/*.cpp
 
 HEADERS += \
     mainwindow.h \
-    $${ICEGL_PATH}/DisplayList.hpp \
-    $${ICEGL_PATH}/DisplayListAssembler.hpp \
-    $${ICEGL_PATH}/IBusConnector.hpp \
-    $${ICEGL_PATH}/IRenderer.hpp \
-    $${ICEGL_PATH}/Renderer.hpp \
-    $${ICEGL_PATH}/VertexPipeline.hpp \
-    $${ICEGL_PATH}/Vec.hpp \
-    $${ICEGL_PATH}/Mat44.hpp \
-    $${ICEGL_PATH}/Veci.hpp \
-    $${ICEGL_PATH}/IceGL.hpp \
-    $${ICEGL_PATH}/Rasterizer.hpp \
-    $${ICEGL_PATH}/gl.h \
-    $${ICEGL_PATH}/glu.h \
-    $${ICEGL_PATH}/Clipper.hpp \
-    $${ICEGL_PATH}/Lighting.hpp \
-    $${ICEGL_PATH}/TexGen.hpp \
-    $${ICEGL_PATH}/RenderObj.hpp \
-    $${ICEGL_PATH}/PixelPipeline.hpp
+    $${ICEGL_PATH}/*.hpp \
+    $${ICEGL_PATH}/commands/*.hpp \
+    $${ICEGL_PATH}/registers/*.hpp
 }
 
 QMAKE_CXXFLAGS += -I../tuxracer/Rasterix/lib/3rdParty/span/include/

@@ -21,7 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_image(RESOLUTION_W, RESOLUTION_H, QImage::Format_RGB888)
 {
     rr::IceGL::createInstance(m_renderer);
-
+    m_renderer.setRenderResolution(RESOLUTION_W, RESOLUTION_H);
+#ifndef USE_HARDWARE
+    rr::IceGL::getInstance().enableColorBufferStream();
+#endif // USE_HARDWARE
     setupUi(this);
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::newFrame);
@@ -39,7 +42,7 @@ void MainWindow::newFrame()
     if (idle_func)
         idle_func();
 
-    rr::IceGL::getInstance().commit();
+    rr::IceGL::getInstance().render();
 
 #if USE_SIMULATION
     // To prevent tearing in the simulation, wait till the last line is rendered and wait till the last chunk from the framebuffer was transferred.
