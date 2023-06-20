@@ -23,6 +23,7 @@
 #include "image.h"
 #include "hash.h"
 #include "list.h"
+#include <stdint.h>
 
 static bool_t initialized = False;
 static hash_table_t texture_table;

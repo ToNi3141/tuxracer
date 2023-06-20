@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5411cab74..8bb81e75d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -269,14 +269,14 @@ if(WINDOWS)
+   set(CMAKE_SHARED_LIBRARY_PREFIX "")
+ endif()
+ 
+-check_linker_flag(C "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/dynapi/SDL_dynapi.sym" HAVE_WL_VERSION_SCRIPT)
+-if(HAVE_WL_VERSION_SCRIPT)
++# check_linker_flag(C "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/dynapi/SDL_dynapi.sym" HAVE_WL_VERSION_SCRIPT)
++# if(HAVE_WL_VERSION_SCRIPT)
+   target_link_libraries(sdl-shared-build-options INTERFACE "-Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/src/dynapi/SDL_dynapi.sym")
+-else()
+-  if((LINUX AND LIBC_IS_GLIBC) OR ANDROID)
+-    message(FATAL_ERROR "Linker does not support '-Wl,--version-script=xxx.sym'. This is required on the current host platform (${SDL_CMAKE_PLATFORM}).")
+-  endif()
+-endif()
++# else()
++#   if((LINUX AND LIBC_IS_GLIBC) OR ANDROID)
++#     message(FATAL_ERROR "Linker does not support '-Wl,--version-script=xxx.sym'. This is required on the current host platform (${SDL_CMAKE_PLATFORM}).")
++#   endif()
++# endif()
+ 
+ if(CYGWIN)
+   # We build SDL on cygwin without the UNIX emulation layer

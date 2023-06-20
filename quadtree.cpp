@@ -796,7 +796,7 @@ bool	quadsquare::VertexTest(int x, float y, int z, float error, const float View
     float	dx = fabs(x - Viewer[0]) * fabs( ScaleX );
     float	dy = fabs(y - Viewer[1]);
     float	dz = fabs(z - Viewer[2]) * fabs( ScaleZ );
-    float	d = max( dx, max( dy, dz ) );
+    float	d = std::max( dx, std::max( dy, dz ) );
 
 
     if ( vertex_loc == South && ForceSouthVert && d < VERTEX_FORCE_THRESHOLD ) 
@@ -825,7 +825,7 @@ bool	quadsquare::BoxTest(int x, int z, float size, float miny, float maxy, float
     float	dx = ( fabs(x + half - Viewer[0]) - half ) * fabs(ScaleX);
     float	dy = fabs((miny + maxy) * 0.5 - Viewer[1]) - (maxy - miny) * 0.5;
     float	dz = ( fabs(z + half - Viewer[2]) - half ) * fabs(ScaleZ);
-    float	d = max( dx, max( dy , dz ) );
+    float	d = std::max( dx, std::max( dy , dz ) );
 
     if ( d < ERROR_MAGNIFICATION_THRESHOLD ) {
 	error *= ERROR_MAGNIFICATION_AMOUNT;

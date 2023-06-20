@@ -20,7 +20,7 @@
 #include "tuxracer.h"
 
 #if defined( HAVE_SDL )
-#   include "SDL.h"
+#   include "SDL3/SDL.h"
 #endif
 
 #if defined( HAVE_GL_GLX_H )

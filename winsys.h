@@ -25,6 +25,9 @@
 #ifdef USE_ICEGL
 #include "gl.h"
 #include "glu.h"
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL_events.h"
 #else
 #if defined( HAVE_SDL )
 #   include "SDL.h"
@@ -48,71 +51,71 @@ extern "C"
 /* SDL version */
 /*---------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------*/
-
+#define SPECIAL_KEY(x) ((x & 0xffff) | 0x8000)
 typedef enum {
     WSK_NOT_AVAIL = SDLK_UNKNOWN,
 
     /* Numeric keypad */
-    WSK_KP0 = SDLK_KP0,
-    WSK_KP1 = SDLK_KP1,
-    WSK_KP2 = SDLK_KP2,
-    WSK_KP3 = SDLK_KP3,
-    WSK_KP4 = SDLK_KP4,
-    WSK_KP5 = SDLK_KP5,
-    WSK_KP6 = SDLK_KP6,
-    WSK_KP7 = SDLK_KP7,
-    WSK_KP8 = SDLK_KP8,
-    WSK_KP9 = SDLK_KP9,
-    WSK_KP_PERIOD = SDLK_KP_PERIOD,
-    WSK_KP_DIVIDE = SDLK_KP_DIVIDE,
-    WSK_KP_MULTIPLY = SDLK_KP_MULTIPLY,
-    WSK_KP_MINUS = SDLK_KP_MINUS,
-    WSK_KP_PLUS = SDLK_KP_PLUS,
-    WSK_KP_ENTER = SDLK_KP_ENTER,
-    WSK_KP_EQUALS = SDLK_KP_EQUALS,
+    WSK_KP0 = SPECIAL_KEY(SDLK_KP_0),
+    WSK_KP1 = SPECIAL_KEY(SDLK_KP_1),
+    WSK_KP2 = SPECIAL_KEY(SDLK_KP_2),
+    WSK_KP3 = SPECIAL_KEY(SDLK_KP_3),
+    WSK_KP4 = SPECIAL_KEY(SDLK_KP_4),
+    WSK_KP5 = SPECIAL_KEY(SDLK_KP_5),
+    WSK_KP6 = SPECIAL_KEY(SDLK_KP_6),
+    WSK_KP7 = SPECIAL_KEY(SDLK_KP_7),
+    WSK_KP8 = SPECIAL_KEY(SDLK_KP_8),
+    WSK_KP9 = SPECIAL_KEY(SDLK_KP_9),
+    WSK_KP_PERIOD = SPECIAL_KEY(SDLK_KP_PERIOD),
+    WSK_KP_DIVIDE = SPECIAL_KEY(SDLK_KP_DIVIDE),
+    WSK_KP_MULTIPLY = SPECIAL_KEY(SDLK_KP_MULTIPLY),
+    WSK_KP_MINUS = SPECIAL_KEY(SDLK_KP_MINUS),
+    WSK_KP_PLUS = SPECIAL_KEY(SDLK_KP_PLUS),
+    WSK_KP_ENTER = SPECIAL_KEY(SDLK_KP_ENTER),
+    WSK_KP_EQUALS = SPECIAL_KEY(SDLK_KP_EQUALS),
 
     /* Arrows + Home/End pad */
-    WSK_UP = SDLK_UP,
-    WSK_DOWN = SDLK_DOWN,
-    WSK_RIGHT = SDLK_RIGHT,
-    WSK_LEFT = SDLK_LEFT,
-    WSK_INSERT = SDLK_INSERT,
-    WSK_HOME = SDLK_HOME,
-    WSK_END = SDLK_END,
-    WSK_PAGEUP = SDLK_PAGEUP,
-    WSK_PAGEDOWN = SDLK_PAGEDOWN,
+    WSK_UP = SPECIAL_KEY(SDLK_UP),
+    WSK_DOWN = SPECIAL_KEY(SDLK_DOWN),
+    WSK_RIGHT = SPECIAL_KEY(SDLK_RIGHT),
+    WSK_LEFT = SPECIAL_KEY(SDLK_LEFT),
+    WSK_INSERT = SPECIAL_KEY(SDLK_INSERT),
+    WSK_HOME = SPECIAL_KEY(SDLK_HOME),
+    WSK_END = SPECIAL_KEY(SDLK_END),
+    WSK_PAGEUP = SPECIAL_KEY(SDLK_PAGEUP),
+    WSK_PAGEDOWN = SPECIAL_KEY(SDLK_PAGEDOWN),
 
     /* Function keys */
-    WSK_F1 = SDLK_F1,
-    WSK_F2 = SDLK_F2,
-    WSK_F3 = SDLK_F3,
-    WSK_F4 = SDLK_F4,
-    WSK_F5 = SDLK_F5,
-    WSK_F6 = SDLK_F6,
-    WSK_F7 = SDLK_F7,
-    WSK_F8 = SDLK_F8,
-    WSK_F9 = SDLK_F9,
-    WSK_F10 = SDLK_F10,
-    WSK_F11 = SDLK_F11,
-    WSK_F12 = SDLK_F12,
-    WSK_F13 = SDLK_F13,
-    WSK_F14 = SDLK_F14,
-    WSK_F15 = SDLK_F15,
+    WSK_F1 = SPECIAL_KEY(SDLK_F1),
+    WSK_F2 = SPECIAL_KEY(SDLK_F2),
+    WSK_F3 = SPECIAL_KEY(SDLK_F3),
+    WSK_F4 = SPECIAL_KEY(SDLK_F4),
+    WSK_F5 = SPECIAL_KEY(SDLK_F5),
+    WSK_F6 = SPECIAL_KEY(SDLK_F6),
+    WSK_F7 = SPECIAL_KEY(SDLK_F7),
+    WSK_F8 = SPECIAL_KEY(SDLK_F8),
+    WSK_F9 = SPECIAL_KEY(SDLK_F9),
+    WSK_F10 = SPECIAL_KEY(SDLK_F10),
+    WSK_F11 = SPECIAL_KEY(SDLK_F11),
+    WSK_F12 = SPECIAL_KEY(SDLK_F12),
+    WSK_F13 = SPECIAL_KEY(SDLK_F13),
+    WSK_F14 = SPECIAL_KEY(SDLK_F14),
+    WSK_F15 = SPECIAL_KEY(SDLK_F15),
 
     /* Key state modifier keys */
-    WSK_NUMLOCK = SDLK_NUMLOCK,
-    WSK_CAPSLOCK = SDLK_CAPSLOCK,
-    WSK_SCROLLOCK = SDLK_SCROLLOCK,
-    WSK_RSHIFT = SDLK_RSHIFT,
-    WSK_LSHIFT = SDLK_LSHIFT,
-    WSK_RCTRL = SDLK_RCTRL,
-    WSK_LCTRL = SDLK_LCTRL,
-    WSK_RALT = SDLK_RALT,
-    WSK_LALT = SDLK_LALT,
-    WSK_RMETA = SDLK_RMETA,
-    WSK_LMETA = SDLK_LMETA,
+    WSK_NUMLOCK = SPECIAL_KEY(SDL_KMOD_NUM),
+    WSK_CAPSLOCK = SPECIAL_KEY(SDL_KMOD_CAPS),
+    WSK_SCROLLOCK = SPECIAL_KEY(SDL_KMOD_SCROLL),
+    WSK_RSHIFT = SPECIAL_KEY(SDL_KMOD_RSHIFT),
+    WSK_LSHIFT = SPECIAL_KEY(SDL_KMOD_LSHIFT),
+    WSK_RCTRL = SPECIAL_KEY(SDL_KMOD_RCTRL),
+    WSK_LCTRL = SPECIAL_KEY(SDL_KMOD_LCTRL),
+    WSK_RALT = SPECIAL_KEY(SDL_KMOD_RALT),
+    WSK_LALT = SPECIAL_KEY(SDL_KMOD_LALT),
+    WSK_RMETA = SPECIAL_KEY(SDL_KMOD_RALT),
+    WSK_LMETA = SPECIAL_KEY(SDL_KMOD_LALT),
 
-    WSK_LAST
+    WSK_LAST = 0xffff
 
 } winsys_keysym_t;
 
@@ -217,87 +220,6 @@ typedef enum {
 
 #endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
-
-#ifdef USE_ICEGL
-typedef enum {
-    WSK_NOT_AVAIL = 0,
-
-    /* Numeric keypad */
-    WSK_KP0 = 0,
-    WSK_KP1 = 0,
-    WSK_KP2 = 0,
-    WSK_KP3 = 0,
-    WSK_KP4 = 0,
-    WSK_KP5 = 0,
-    WSK_KP6 = 0,
-    WSK_KP7 = 0,
-    WSK_KP8 = 0,
-    WSK_KP9 = 0,
-    WSK_KP_PERIOD = 0,
-    WSK_KP_DIVIDE = 0,
-    WSK_KP_MULTIPLY = 0,
-    WSK_KP_MINUS = 0,
-    WSK_KP_PLUS = 0,
-    WSK_KP_ENTER = 0,
-    WSK_KP_EQUALS = 0,
-
-    /* Arrows + Home/End pad */
-    WSK_UP = 0x100,
-    WSK_DOWN = 0x101,
-    WSK_RIGHT = 0x102,
-    WSK_LEFT = 0x103,
-    WSK_INSERT = 0x104,
-    WSK_HOME = 0x105,
-    WSK_END = 0x106,
-    WSK_PAGEUP = 0x107,
-    WSK_PAGEDOWN = 0x108,
-
-    /* Function keys */
-    WSK_F1 = 0x110,
-    WSK_F2 = 0x111,
-    WSK_F3 = 0x112,
-    WSK_F4 = 0x113,
-    WSK_F5 = 0x114,
-    WSK_F6 = 0x115,
-    WSK_F7 = 0x116,
-    WSK_F8 = 0x117,
-    WSK_F9 = 0x118,
-    WSK_F10 = 0x119,
-    WSK_F11 = 0x11a,
-    WSK_F12 = 0x11b,
-    WSK_F13 = 0,
-    WSK_F14 = 0,
-    WSK_F15 = 0,
-
-    /* Key state modifier keys */
-    WSK_NUMLOCK = 0,
-    WSK_CAPSLOCK = 0,
-    WSK_SCROLLOCK = 0,
-    WSK_RSHIFT = 0,
-    WSK_LSHIFT = 0,
-    WSK_RCTRL = 0,
-    WSK_LCTRL = 0,
-    WSK_RALT = 0,
-    WSK_LALT = 0,
-    WSK_RMETA = 0,
-    WSK_LMETA = 0,
-
-    WSK_LAST = UCHAR_MAX /* GLUT doesn't define a max key, but this is more
-			    than enough as of version 3.7 */
-} winsys_keysym_t;
-
-typedef enum {
-    WS_LEFT_BUTTON = 0x120,
-    WS_MIDDLE_BUTTON = 0x121,
-    WS_RIGHT_BUTTON = 0x122
-} winsys_mouse_button_t;
-
-typedef enum {
-    WS_MOUSE_DOWN = 0x130,
-    WS_MOUSE_UP = 0x131
-} winsys_button_state_t;
-
-#endif // USE_ICEGL
 
 typedef void (*winsys_display_func_t)();
 typedef void (*winsys_idle_func_t)();

@@ -22,7 +22,7 @@
 #include "ui_mgr.h"
 
 #if defined( HAVE_SDL )
-#   include "SDL.h"
+#   include "SDL3/SDL.h"
 #endif /* defined( HAVE_SDL ) */
 
 

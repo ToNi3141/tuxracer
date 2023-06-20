@@ -25,7 +25,10 @@
 /* Abstracts creation of windows, handling of events, etc. */
 
 #if defined( HAVE_SDL )
-
+#include "IceGL.hpp"
+#include "Renderer.hpp"
+#include "RenderConfigs.hpp"
+#include "DMAProxyBusConnector.hpp"
 #if defined( HAVE_SDL_MIXER )
 #   include "SDL_mixer.h"
 #endif
@@ -48,6 +51,11 @@ static winsys_motion_func_t passive_motion_func = NULL;
 static winsys_atexit_func_t atexit_func = NULL;
 
 static bool_t redisplay = False;
+
+static const uint32_t RESOLUTION_H = 600;
+static const uint32_t RESOLUTION_W = 1024;
+rr::DMAProxyBusConnector m_busConnector {};
+rr::Renderer<rr::RenderConfigRasterixZynq> m_renderer { m_busConnector };
 
 
 /*---------------------------------------------------------------------------*/
@@ -164,7 +172,7 @@ void winsys_set_passive_motion_func( winsys_motion_func_t func )
 */
 void winsys_swap_buffers()
 {
-    SDL_GL_SwapBuffers();
+    rr::IceGL::getInstance().render();
 }
 
 
@@ -177,61 +185,8 @@ void winsys_swap_buffers()
 */
 void winsys_warp_pointer( int x, int y )
 {
-    SDL_WarpMouse( x, y );
+    SDL_WarpMouseGlobal( x, y );
 }
-
-
-/*---------------------------------------------------------------------------*/
-/*! 
-  Sets up the SDL OpenGL rendering context
-  \author  jfpatry
-  \date    Created:  2000-10-20
-  \date    Modified: 2000-10-20
-*/
-static void setup_sdl_video_mode()
-{
-    Uint32 video_flags = SDL_OPENGL; 
-    int bpp = 0;
-    int width, height;
-
-    if ( getparam_fullscreen() ) {
-	video_flags |= SDL_FULLSCREEN;
-    } else {
-	video_flags |= SDL_RESIZABLE;
-    }
-
-    switch ( getparam_bpp_mode() ) {
-    case 0:
-	/* Use current bpp */
-	bpp = 0;
-	break;
-
-    case 1:
-	/* 16 bpp */
-	bpp = 16;
-	break;
-
-    case 2:
-	/* 32 bpp */
-	bpp = 32;
-	break;
-
-    default:
-	setparam_bpp_mode( 0 );
-	bpp = getparam_bpp_mode();
-    }
-
-    width = getparam_x_resolution();
-    height = getparam_y_resolution();
-
-    if ( ( screen = SDL_SetVideoMode( width, height, bpp, video_flags ) ) == 
-	 NULL ) 
-    {
-	handle_system_error( 1, "Couldn't initialize video: %s", 
-			     SDL_GetError() );
-    }
-}
-
 
 /*---------------------------------------------------------------------------*/
 /*! 
@@ -244,30 +199,19 @@ static void setup_sdl_video_mode()
 void winsys_init( int *argc, char **argv, char *window_title, 
 		  char *icon_title )
 {
-    Uint32 sdl_flags = SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE;
+    rr::IceGL::createInstance(m_renderer);
+    m_renderer.setRenderResolution(RESOLUTION_W, RESOLUTION_H);
 
-    /*
-     * Initialize SDL
-     */
-    if ( SDL_Init( sdl_flags ) < 0 ) {
-	handle_error( 1, "Couldn't initialize SDL: %s", SDL_GetError() );
+    setparam_x_resolution(RESOLUTION_W);
+    setparam_y_resolution(RESOLUTION_H);
+
+    SDL_bool done = SDL_FALSE;
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        printf("error initializing SDL: %s\n", SDL_GetError());
     }
 
-
-    /* 
-     * Init video 
-     */
-    SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-
-#if defined( USE_STENCIL_BUFFER )
-    /* Not sure if this is sufficient to activate stencil buffer  */
-    SDL_GL_SetAttribute( SDL_GL_STENCIL_SIZE, 8 );
-#endif
-
-    setup_sdl_video_mode();
-
-    SDL_WM_SetCaption( window_title, icon_title );
-
+    SDL_Window* win = SDL_CreateWindow("Tuxracer", RESOLUTION_W, RESOLUTION_H, SDL_WINDOW_RESIZABLE);
 }
 
 
@@ -293,12 +237,6 @@ void winsys_shutdown()
 */
 void winsys_enable_key_repeat( bool_t enabled )
 {
-    if ( enabled ) {
-	SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY,
-			     SDL_DEFAULT_REPEAT_INTERVAL );
-    } else {
-	SDL_EnableKeyRepeat( 0, 0 );
-    }
 }
 
 
@@ -311,7 +249,10 @@ void winsys_enable_key_repeat( bool_t enabled )
 */
 void winsys_show_cursor( bool_t visible )
 {
-    SDL_ShowCursor( visible );
+    if (visible)
+        SDL_ShowCursor();
+    else
+        SDL_HideCursor();
 }
 
 /*---------------------------------------------------------------------------*/
@@ -325,41 +266,41 @@ void winsys_show_cursor( bool_t visible )
 void winsys_process_events()
 {
     SDL_Event event; 
-    unsigned int key;
-    int x, y;
+    uint32_t key;
+    float x, y;
 
     while (True) {
 
-	SDL_LockAudio();
-	SDL_UnlockAudio();
+	// SDL_LockAudio();
+	// SDL_UnlockAudio();
 
 	while ( SDL_PollEvent( &event ) ) {
 	    
 	    switch ( event.type ) {
-	    case SDL_KEYDOWN:
+	    case SDL_EVENT_KEY_DOWN:
 		if ( keyboard_func ) {
 		    SDL_GetMouseState( &x, &y );
 		    key = event.key.keysym.sym; 
-		    (*keyboard_func)( key,
-				      key >= 256,
+		    (*keyboard_func)( (key & SDLK_SCANCODE_MASK) ? SPECIAL_KEY(key) : key,
+				      static_cast<bool_t>((key & SDLK_SCANCODE_MASK) != 0),
 				      False,
 				      x, y );
 		}
 		break;
 
-	    case SDL_KEYUP:
+	    case SDL_EVENT_KEY_UP:
 		if ( keyboard_func ) {
 		    SDL_GetMouseState( &x, &y );
 		    key = event.key.keysym.sym; 
-		    (*keyboard_func)( key,
-				      key >= 256,
+		    (*keyboard_func)( (key & SDLK_SCANCODE_MASK) ? SPECIAL_KEY(key) : key,
+				      static_cast<bool_t>((key & SDLK_SCANCODE_MASK) != 0),
 				      True,
 				      x, y );
 		}
 		break;
 
-	    case SDL_MOUSEBUTTONDOWN:
-	    case SDL_MOUSEBUTTONUP:
+	    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+	    case SDL_EVENT_MOUSE_BUTTON_UP:
 		if ( mouse_func ) {
 		    (*mouse_func)( event.button.button,
 				   event.button.state,
@@ -368,7 +309,7 @@ void winsys_process_events()
 		}
 		break;
 
-	    case SDL_MOUSEMOTION:
+	    case SDL_EVENT_MOUSE_MOTION:
 		if ( event.motion.state ) {
 		    /* buttons are down */
 		    if ( motion_func ) {
@@ -383,19 +324,10 @@ void winsys_process_events()
 		    }
 		}
 		break;
-
-	    case SDL_VIDEORESIZE:
-		setup_sdl_video_mode();
-		if ( reshape_func ) {
-		    (*reshape_func)( event.resize.w,
-				     event.resize.h );
-		}
-		
-		break;
 	    }
 
-	    SDL_LockAudio();
-	    SDL_UnlockAudio();
+	    // SDL_LockAudio();
+	    // SDL_UnlockAudio();
 	}
 
 	if ( redisplay && display_func ) {
@@ -407,7 +339,7 @@ void winsys_process_events()
 
 	/* Delay for 1 ms.  This allows the other threads to do some
 	   work (otherwise the audio thread gets starved). */
-	SDL_Delay(1);
+	// SDL_Delay(1);
 
     }
 
@@ -767,148 +699,5 @@ void winsys_exit( int code )
 
 #endif // HAVE_GLUT
 #endif /* defined( HAVE_SDL ) */
-
-#ifdef USE_ICEGL
-
-#undef min
-#undef max
-#include <QApplication>
-#include "mainwindow.h"
-
-winsys_keyboard_func_t keyboard_func = NULL;
-winsys_display_func_t disp_func = NULL;
-winsys_idle_func_t idle_func = NULL;
-
-static bool_t redisplay = False;
-
-void winsys_post_redisplay()
-{
-    redisplay = True;
-}
-
-void winsys_set_display_func( winsys_display_func_t func )
-{
-    disp_func = func;
-}
-
-void winsys_set_idle_func( winsys_idle_func_t func )
-{
-    idle_func = func;
-}
-
-void winsys_set_reshape_func( winsys_reshape_func_t func )
-{
-
-}
-
-
-/* Keyboard callbacks */
-//static void glut_keyboard_cb( unsigned char ch, int x, int y )
-//{
-//    if ( keyboard_func ) {
-//	(*keyboard_func)( ch, False, False, x, y );
-//    }
-//}
-
-//static void glut_special_cb( int key, int x, int y )
-//{
-//    if ( keyboard_func ) {
-//	(*keyboard_func)( key, True, False, x, y );
-//    }
-//}
-
-//static void glut_keyboard_up_cb( unsigned char ch, int x, int y )
-//{
-//    if ( keyboard_func ) {
-//	(*keyboard_func)( ch, False, True, x, y );
-//    }
-//}
-
-//static void glut_special_up_cb( int key, int x, int y )
-//{
-//    if ( keyboard_func ) {
-//	(*keyboard_func)( key, True, True, x, y );
-//    }
-//}
-
-void winsys_set_keyboard_func( winsys_keyboard_func_t func )
-{
-    keyboard_func = func;
-}
-
-void winsys_set_mouse_func( winsys_mouse_func_t func )
-{
-}
-
-void winsys_set_motion_func( winsys_motion_func_t func )
-{
-}
-
-void winsys_set_passive_motion_func( winsys_motion_func_t func )
-{
-}
-
-void winsys_swap_buffers()
-{
-    // Implement
-}
-
-void winsys_warp_pointer( int x, int y )
-{
-}
-
-void winsys_init( int *argc, char **argv, char *window_title,
-		  char *icon_title )
-{
-
-    static QApplication a(*argc, argv);
-    static MainWindow w;
-    w.init();
-    setparam_x_resolution(MainWindow::RESOLUTION_W);
-    setparam_y_resolution(MainWindow::RESOLUTION_H);
-    w.show();
-}
-
-void winsys_shutdown()
-{
-}
-
-void winsys_enable_key_repeat( bool_t enabled )
-{
-}
-
-void winsys_show_cursor( bool_t visible )
-{
-}
-
-void winsys_process_events()
-{
-    qApp->exec();
-    // Implement
-//    /* Set up keyboard callbacks */
-//    glutKeyboardFunc( glut_keyboard_cb );
-//    glutKeyboardUpFunc( glut_keyboard_up_cb );
-//    glutSpecialFunc( glut_special_cb );
-//    glutSpecialUpFunc( glut_special_up_cb );
-
-//    glutMainLoop();
-}
-
-void winsys_atexit( winsys_atexit_func_t func )
-{
-    static bool_t called = False;
-
-    check_assertion( called == False, "winsys_atexit called twice" );
-
-    called = True;
-
-    atexit(func);
-}
-
-void winsys_exit( int code )
-{
-    exit(code);
-}
-#endif
 
 /* EOF */

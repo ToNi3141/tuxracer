@@ -41,7 +41,7 @@ static int get_root_level( int nx, int nz )
 	nz += 1;
     }
 
-    return max( xlev, zlev );
+    return std::max( xlev, zlev );
 }
 
 static void point_to_float_array( float dest[3], point_t src )
