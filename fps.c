@@ -28,27 +28,32 @@
 static const colour_t text_colour = { 0.0, 0.0, 0.0, 1.0 };
 
 static int      g_frames = 0;
-static clock_t  g_t_old = 0;
+static long  g_t_old = 0;
 static scalar_t g_fps  = 0;
 static scalar_t g_initialized = 0;
 
+long millis(){
+    struct timespec _t;
+    clock_gettime(CLOCK_REALTIME, &_t);
+    return _t.tv_sec*1000 + lround(_t.tv_nsec/1e6);
+}
+
 void new_frame_for_fps_calc()
 {
-    clock_t t_new;
+    long t_new;
 
     if ( ! g_initialized ) { 
-	g_t_old = clock();
+	g_t_old = millis();
 	g_initialized = 1;
     }
 
     g_frames += 1;
 
     if ( g_frames >= NUM_FRAMES ) {
-	t_new = clock();
+	t_new = millis();
 	g_frames = 0;
 	g_fps = (scalar_t) NUM_FRAMES / 
-	        (scalar_t) (t_new-g_t_old) * 
-	        (scalar_t) CLOCKS_PER_SEC;
+	        (scalar_t) (t_new-g_t_old) * 1000;
 
 	g_t_old = t_new;
     }
