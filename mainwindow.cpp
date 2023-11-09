@@ -15,6 +15,10 @@ extern winsys_display_func_t disp_func;
 extern winsys_idle_func_t idle_func;
 extern winsys_keyboard_func_t keyboard_func;
 
+double sc_time_stamp() {
+    static double t = 0;
+    return ++t;
+}
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,9 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     rr::IceGL::createInstance(m_renderer);
     m_renderer.setRenderResolution(RESOLUTION_W, RESOLUTION_H);
-#ifndef USE_HARDWARE
-    rr::IceGL::getInstance().enableColorBufferStream();
-#endif // USE_HARDWARE
     setupUi(this);
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::newFrame);

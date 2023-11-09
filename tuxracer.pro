@@ -48,6 +48,7 @@ equals(TARGET, "simulation") {
 
     QMAKE_CXXFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
         -I$${VERILATOR_BUS_CONNECTOR_PATH}/ \
+        -I$${VERILATOR_BUS_CONNECTOR_PATH}/../ \
         -I$${VERILATOR_PATH}/include/
 
     QMAKE_CFLAGS += -I$${VERILATOR_CODE_GEN_PATH}/ \
@@ -55,8 +56,10 @@ equals(TARGET, "simulation") {
         -I$${VERILATOR_PATH}/include/
 
     SOURCES += $${VERILATOR_PATH}/include/verilated.cpp
+    SOURCES += $${VERILATOR_PATH}/include/verilated_vcd_c.cpp
 
     HEADERS += $${VERILATOR_BUS_CONNECTOR_PATH}/VerilatorBusConnector.hpp
+    HEADERS += $${VERILATOR_BUS_CONNECTOR_PATH}/../util/GenericMemoryBusConnector.hpp
 }
 
 equals(TARGET, "hardware") {
