@@ -55,7 +55,7 @@ static bool_t redisplay = False;
 static const uint32_t RESOLUTION_H = 600;
 static const uint32_t RESOLUTION_W = 1024;
 rr::DMAProxyBusConnector m_busConnector {};
-rr::Renderer<rr::RenderConfigRasterixZynq> m_renderer { m_busConnector };
+rr::Renderer<rr::RenderConfigRRXEFZynq> m_renderer { m_busConnector };
 
 
 /*---------------------------------------------------------------------------*/

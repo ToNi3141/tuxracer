@@ -22,12 +22,13 @@ This software depends on `TCL` and `SDL3`. It is easy to integrate `TCL`. You ca
 git clone https://github.com/libsdl-org/SDL.git
 cd SDL
 git apply ../tuxracer/SDL3BuildFix.patch
+export SYSROOTS=/opt/petalinux/2022.2/sysroots
 cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../tuxracer/Rasterix/toolchains/toolchain_zynq.cmake -DSDL_SYSTEM_ICONV=false
 cmake --build build
 ```
 Now copy the SDL library to `/lib` on your target.
 
-Note: SDL requires a window manager for keyboard inputs. You probably want to use a small window manger like matchbox. You can configure via petalinux your rootfs to include the window manager in your image. There are some howtos in the internet how to get it to run. The device tree file and the kernel config in the Rasterix repository include already everything you need to make the framebuffer available (see `Rasterix/lib/driver/dmaproxy/kernel`), only the rootfs must be configured. There are probably enough howto's how to do it in the internet with all required dependencies like [this](https://www.hackster.io/whitney-knitter/create-a-desktop-environment-for-the-te0802-using-petalinux-821ee8#toc-configure-root-filesystem-for-desktop-environment-2). If you use this howto and you use a ZYNQ7000 device, just ignore the `libmali` stuff.
+Note: SDL requires a window manager for keyboard inputs. You probably want to use a small window manger like matchbox. You can configure via petalinux your rootfs to include the window manager in your image. The device tree file and the kernel config in the Rasterix repository include already everything you need to make the framebuffer available (see `Rasterix/lib/driver/dmaproxy/kernel`), only the rootfs must be configured. There are probably enough howto's how to do it in the internet with all required dependencies like [this](https://www.hackster.io/whitney-knitter/create-a-desktop-environment-for-the-te0802-using-petalinux-821ee8#toc-configure-root-filesystem-for-desktop-environment-2). If you use this howto and you use a ZYNQ7000 device, just ignore the `libmali` stuff.
 
 You also have to download the assets. You can find them (together with the original source code) at http://tuxracer.sourceforge.net/download.html
 
