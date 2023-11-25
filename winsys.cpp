@@ -55,7 +55,7 @@ static bool_t redisplay = False;
 static const uint32_t RESOLUTION_H = 600;
 static const uint32_t RESOLUTION_W = 1024;
 rr::DMAProxyBusConnector m_busConnector {};
-rr::Renderer<rr::RenderConfigRRXEFZynq> m_renderer { m_busConnector };
+rr::Renderer<rr::RenderConfigRRXIFZynq> m_renderer { m_busConnector };
 
 
 /*---------------------------------------------------------------------------*/
@@ -211,7 +211,7 @@ void winsys_init( int *argc, char **argv, char *window_title,
         printf("error initializing SDL: %s\n", SDL_GetError());
     }
 
-    SDL_Window* win = SDL_CreateWindow("Tuxracer", RESOLUTION_W, RESOLUTION_H, SDL_WINDOW_RESIZABLE);
+    SDL_Window* win = SDL_CreateWindow("Tuxracer", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, RESOLUTION_W, RESOLUTION_H, SDL_WINDOW_FULLSCREEN);
 }
 
 
@@ -249,10 +249,7 @@ void winsys_enable_key_repeat( bool_t enabled )
 */
 void winsys_show_cursor( bool_t visible )
 {
-    if (visible)
-        SDL_ShowCursor();
-    else
-        SDL_HideCursor();
+    SDL_ShowCursor( visible );
 }
 
 /*---------------------------------------------------------------------------*/
@@ -266,8 +263,8 @@ void winsys_show_cursor( bool_t visible )
 void winsys_process_events()
 {
     SDL_Event event; 
-    uint32_t key;
-    float x, y;
+    unsigned int key;
+    int x, y;
 
     while (True) {
 
@@ -277,7 +274,7 @@ void winsys_process_events()
 	while ( SDL_PollEvent( &event ) ) {
 	    
 	    switch ( event.type ) {
-	    case SDL_EVENT_KEY_DOWN:
+	    case SDL_KEYDOWN:
 		if ( keyboard_func ) {
 		    SDL_GetMouseState( &x, &y );
 		    key = event.key.keysym.sym; 
@@ -288,7 +285,7 @@ void winsys_process_events()
 		}
 		break;
 
-	    case SDL_EVENT_KEY_UP:
+	    case SDL_KEYUP:
 		if ( keyboard_func ) {
 		    SDL_GetMouseState( &x, &y );
 		    key = event.key.keysym.sym; 
@@ -299,8 +296,8 @@ void winsys_process_events()
 		}
 		break;
 
-	    case SDL_EVENT_MOUSE_BUTTON_DOWN:
-	    case SDL_EVENT_MOUSE_BUTTON_UP:
+	    case SDL_MOUSEBUTTONDOWN:
+	    case SDL_MOUSEBUTTONUP:
 		if ( mouse_func ) {
 		    (*mouse_func)( event.button.button,
 				   event.button.state,
@@ -309,7 +306,7 @@ void winsys_process_events()
 		}
 		break;
 
-	    case SDL_EVENT_MOUSE_MOTION:
+	    case SDL_MOUSEMOTION:
 		if ( event.motion.state ) {
 		    /* buttons are down */
 		    if ( motion_func ) {

@@ -8,6 +8,7 @@ It also shows how to integrate the library into your own software projects via c
 git clone https://github.com/ToNi3141/tuxracer.git
 cd tuxracer
 git submodule update --init --recursive
+export SYSROOTS=/opt/petalinux/2022.2/sysroots
 cmake --preset zynq_embedded_linux -DCMAKE_TOOLCHAIN_FILE=Rasterix/toolchains/toolchain_zynq.cmake
 cmake --build build/zynq/
 ```
@@ -15,15 +16,15 @@ cmake --build build/zynq/
 Copy tuxracer now to your target. Please refer also the documentation in the Rasterix directory how to configure the kernel and how to build the kernel module.
 
 ## Build dependencies
-This software depends on `TCL` and `SDL3`. It is easy to integrate `TCL`. You can just setup in petalinux your rootfs to include `TCL` and rebuild your rootfs and the SDK. 
+This software depends on `TCL` and `SDL2`. It is easy to integrate `TCL`. You can just setup in petalinux your rootfs to include `TCL` and rebuild your rootfs and the SDK. 
 
-`SDL3` is a bit more complicated. To avoid setting the `SDL3_PATH` in the cmake project, just checkout `SDL3` in the same directory where you have checked out tuxracer and build it.
+`SDL2` is a bit more complicated. To avoid setting the `SDL_PATH` in the cmake project, just checkout `SDL2` in the same directory where you have checked out tuxracer and build it.
 ```sh
 git clone https://github.com/libsdl-org/SDL.git
 cd SDL
-git apply ../tuxracer/SDL3BuildFix.patch
+checkout SDL2
 export SYSROOTS=/opt/petalinux/2022.2/sysroots
-cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../tuxracer/Rasterix/toolchains/toolchain_zynq.cmake -DSDL_SYSTEM_ICONV=false
+cmake -S . -B build -DCMAKE_TOOLCHAIN_FILE=../tuxracer/Rasterix/toolchains/toolchain_zynq.cmake  -DSDL_SYSTEM_ICONV=false
 cmake --build build
 ```
 Now copy the SDL library to `/lib` on your target.
