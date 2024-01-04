@@ -47,6 +47,7 @@ add_definitions(
     -DUSE_ICEGL 
     -DHAVE_SDL 
     -DTUXRACER_NO_ASSERT
+    -DSPDLOG_ACTIVE_LEVEL=4
 )
 
 # Add an executable

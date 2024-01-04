@@ -9,7 +9,7 @@ git clone https://github.com/ToNi3141/tuxracer.git
 cd tuxracer
 git submodule update --init --recursive
 export SYSROOTS=/opt/petalinux/2022.2/sysroots
-cmake --preset zynq_embedded_linux -DCMAKE_TOOLCHAIN_FILE=Rasterix/toolchains/toolchain_zynq.cmake
+cmake --preset zynq_embedded_linux -DCMAKE_TOOLCHAIN_FILE=Rasterix/toolchains/toolchain_zynq.cmake -DVARIANT_RRXIF=ON
 cmake --build build/zynq/
 ```
 
