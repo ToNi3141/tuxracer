@@ -33,6 +33,19 @@ MainWindow::MainWindow(QWidget *parent) :
     m_timer.setInterval(33);
     m_timer.setSingleShot(false);
     m_timer.start();
+    #if SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_TRACE
+    spdlog::set_level(spdlog::level::trace);
+    #elif SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_DEBUG
+    spdlog::set_level(spdlog::level::debug);
+    #elif SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_INFO
+    spdlog::set_level(spdlog::level::info);
+    #elif SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_WARN
+    spdlog::set_level(spdlog::level::warn);
+    #elif SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_ERROR
+    spdlog::set_level(spdlog::level::err);
+    #elif SPDLOG_ACTIVE_LEVEL == SPDLOG_LEVEL_CRITICAL
+    spdlog::set_level(spdlog::level::critical);
+    #endif
 }
 
 
@@ -47,7 +60,6 @@ void MainWindow::newFrame()
 
 #if USE_SIMULATION
     // To prevent tearing in the simulation, wait till the last line is rendered and wait till the last chunk from the framebuffer was transferred.
-    m_renderer.blockTillRenderingFinished();
     m_busConnector.waitForLastFramebufferChunk();
 
     // Copy picture from internal framebuffer into the QImage.
