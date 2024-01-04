@@ -123,8 +123,13 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
     	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
        }
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+#ifdef USE_ICEGL
+        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                        GL_LINEAR );
+#else
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                         get_min_filter() );
+#endif // USE_ICEGL
         /* Check if we need to scale image */
         glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
 
