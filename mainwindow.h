@@ -5,9 +5,9 @@
 #include <QImage>
 #include <QTimer>
 #include "IceGL.hpp"
-#include "Renderer.hpp"
+#include "renderer/Renderer.hpp"
 #include "RenderConfigs.hpp"
-#include "RendererMemoryOptimized.hpp"
+#include "renderer/RendererMemoryOptimized.hpp"
 #if USE_SIMULATION
 #include "VerilatorBusConnector.hpp"
 #endif

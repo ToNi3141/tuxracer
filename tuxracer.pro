@@ -1,6 +1,6 @@
 #TARGET = glut
-#TARGET = simulation
-TARGET = hardware
+TARGET = simulation
+#TARGET = hardware
 TEMPLATE = app
 CONFIG += console c++2a
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
@@ -93,11 +93,16 @@ QMAKE_CFLAGS += -I$${ICEGL_PATH}/
 
 SOURCES += \
     mainwindow.cpp \
+    $${ICEGL_PATH}/vertexpipeline/*.cpp \
+    $${ICEGL_PATH}/pixelpipeline/*.cpp \
+    $${ICEGL_PATH}/renderer/*.cpp \
     $${ICEGL_PATH}/*.cpp
 
 HEADERS += \
     mainwindow.h \
     $${ICEGL_PATH}/*.hpp \
+    $${ICEGL_PATH}/vertexpipeline/*.hpp \
+    $${ICEGL_PATH}/pixelpipeline/*.hpp \
     $${ICEGL_PATH}/commands/*.hpp \
     $${ICEGL_PATH}/registers/*.hpp
 }
