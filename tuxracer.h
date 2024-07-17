@@ -101,7 +101,7 @@
 #define VERSION "1.2.3"
 #define HAVE_GETTIMEOFDAY 1
 
-#ifdef USE_ICEGL
+#ifdef USE_RRXGL
 #include "gl.h"
 #include "glu.h"
 #else

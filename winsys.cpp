@@ -25,9 +25,8 @@
 /* Abstracts creation of windows, handling of events, etc. */
 
 #if defined( HAVE_SDL )
-#include "IceGL.hpp"
-#include "Renderer.hpp"
-#include "RenderConfigs.hpp"
+#include "RRXGL.hpp"
+#include "ThreadedRenderer.hpp"
 #include "DMAProxyBusConnector.hpp"
 #if defined( HAVE_SDL_MIXER )
 #   include "SDL_mixer.h"
@@ -54,8 +53,35 @@ static bool_t redisplay = False;
 
 static const uint32_t RESOLUTION_H = 600;
 static const uint32_t RESOLUTION_W = 1024;
-rr::DMAProxyBusConnector m_busConnector {};
-rr::Renderer<rr::RenderConfigRRXIFZynq> m_renderer { m_busConnector };
+class GLInitGuard
+{
+public:
+    GLInitGuard()
+    {
+        rr::RRXGL::createInstance(m_busConnector);
+        m_renderer.setRenderer(&(rr::RRXGL::getInstance()));
+    }
+    ~GLInitGuard()
+    {
+        m_renderer.waitForThread();
+        rr::RRXGL::getInstance().destroy();
+    }
+
+    void render()
+    {
+        m_renderer.waitForThread();
+        m_renderer.render();
+    }
+
+    rr::RRXGL& getInst()
+    {
+        return rr::RRXGL::getInstance();
+    }
+
+private:
+    rr::DMAProxyBusConnector m_busConnector;
+    rr::ThreadedRenderer<rr::RRXGL> m_renderer {};
+} guard;
 
 
 /*---------------------------------------------------------------------------*/
@@ -172,7 +198,7 @@ void winsys_set_passive_motion_func( winsys_motion_func_t func )
 */
 void winsys_swap_buffers()
 {
-    rr::IceGL::getInstance().render();
+    guard.render();
 }
 
 
@@ -199,8 +225,7 @@ void winsys_warp_pointer( int x, int y )
 void winsys_init( int *argc, char **argv, char *window_title, 
 		  char *icon_title )
 {
-    rr::IceGL::createInstance(m_renderer);
-    m_renderer.setRenderResolution(RESOLUTION_W, RESOLUTION_H);
+    guard.getInst().setRenderResolution(RESOLUTION_W, RESOLUTION_H);
 
     setparam_x_resolution(RESOLUTION_W);
     setparam_y_resolution(RESOLUTION_H);

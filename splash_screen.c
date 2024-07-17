@@ -94,7 +94,7 @@ static void draw_logo()
 
     for (i=0; i<4; i++) {
 	glBindTexture( GL_TEXTURE_2D, texid[i] );
-#ifdef USE_ICEGL
+#ifdef USE_RRXGL
     w = 128;
     h = 128;
 #else

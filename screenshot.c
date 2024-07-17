@@ -35,7 +35,7 @@ void screenshot()
 } 
 
 char* take_screenshot ( char* filename ) {
-#ifndef USE_ICEGL
+#ifndef USE_RRXGL
     Pic *ppmFile;
     Pic_Pixel *scanline;
     int i, viewport[4];

@@ -123,13 +123,13 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
     	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
        }
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-#ifdef USE_ICEGL
+#ifdef USE_RRXGL
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                         GL_LINEAR );
 #else
         glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                         get_min_filter() );
-#endif // USE_ICEGL
+#endif // USE_RRXGL
         /* Check if we need to scale image */
         glGetIntegerv( GL_MAX_TEXTURE_SIZE, &max_texture_size );
 
@@ -155,7 +155,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 
     uint32_t xScale = ((float)(texImage->sizeX) / scaleFactor) + .5;
     uint32_t yScale = ((float)(texImage->sizeY) / scaleFactor) + .5;
-#ifdef USE_ICEGL
+#ifdef USE_RRXGL
     char* tmpNewData = newdata;
     char* tmpOldData = texImage->data;
 
@@ -193,7 +193,7 @@ bool_t load_texture( char *texname, char *filename, int repeatable )
 	texImage->sizeX = xScale;
 	texImage->sizeY = yScale;
     }
-#ifdef USE_ICEGL
+#ifdef USE_RRXGL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texImage->sizeX, texImage->sizeY, 0, texImage->sizeZ == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texImage->data);
 #else
         gluBuild2DMipmaps( GL_TEXTURE_2D, texImage->sizeZ, texImage->sizeX,
