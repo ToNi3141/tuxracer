@@ -95,8 +95,8 @@ static void draw_logo()
     for (i=0; i<4; i++) {
 	glBindTexture( GL_TEXTURE_2D, texid[i] );
 #ifdef USE_RRXGL
-    w = 128;
-    h = 128;
+    w = 256;
+    h = 256;
 #else
 	glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w );
 	glGetTexLevelParameteriv( GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &h );
