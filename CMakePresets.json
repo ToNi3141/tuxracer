@@ -23,6 +23,21 @@
                 "SDL_PATH": "../SDL",
                 "CMAKE_TOOLCHAIN_FILE": "Rasterix/toolchains/toolchain_zynq.cmake"
             }
+        },
+        {
+            "name": "zynq_tuxracer_ef",
+            "displayName": "Zynq embedded linux build",
+            "description": "Build for an zynq embedded linux device",
+            "binaryDir": "${sourceDir}/build/zynq",
+            "generator": "Unix Makefiles",
+            "inherits": [ "zynq_embedded_linux", "zynq_rrxef"],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "RRX_ENABLE_SPDLOG": "ON",
+                "RRX_DRIVER_DMA_PROXY": "ON",
+                "SDL_PATH": "../SDL",
+                "CMAKE_TOOLCHAIN_FILE": "Rasterix/toolchains/toolchain_zynq.cmake"
+            }
         }
     ]
 }

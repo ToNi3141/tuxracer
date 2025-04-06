@@ -26,8 +26,8 @@
 
 #if defined( HAVE_SDL )
 #include "RRXGL.hpp"
-#include "ThreadedRenderer.hpp"
 #include "DMAProxyBusConnector.hpp"
+#include "MultiThreadRunner.hpp"
 #if defined( HAVE_SDL_MIXER )
 #   include "SDL_mixer.h"
 #endif
@@ -58,19 +58,17 @@ class GLInitGuard
 public:
     GLInitGuard()
     {
-        rr::RRXGL::createInstance(m_busConnector);
-        m_renderer.setRenderer(&(rr::RRXGL::getInstance()));
+        rr::RRXGL::createInstance(m_busConnector, m_runner);
     }
     ~GLInitGuard()
     {
-        m_renderer.waitForThread();
         rr::RRXGL::getInstance().destroy();
     }
 
     void render()
     {
-        m_renderer.waitForThread();
-        m_renderer.render();
+        rr::RRXGL::getInstance().swapDisplayList();
+        rr::RRXGL::getInstance().uploadDisplayList();
     }
 
     rr::RRXGL& getInst()
@@ -79,8 +77,8 @@ public:
     }
 
 private:
-    rr::DMAProxyBusConnector m_busConnector;
-    rr::ThreadedRenderer<rr::RRXGL> m_renderer {};
+    rr::DMAProxyBusConnector m_busConnector {};
+    rr::MultiThreadRunner m_runner {};
 } guard;
 
 

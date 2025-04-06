@@ -130,7 +130,7 @@ target_compile_options(tuxracer
     PRIVATE -fsigned-char -save-temps
 )
 target_link_libraries(tuxracer 
-    PRIVATE gl spdlog::spdlog dmaproxy utils span
+    PRIVATE gl spdlog::spdlog dmaproxy utils span threadrunner
 )
 
 add_subdirectory(Rasterix)
