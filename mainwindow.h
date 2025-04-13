@@ -106,7 +106,7 @@ public:
     static const uint32_t RESOLUTION_W = 1024;
 private:
     rr::FT60XBusConnector m_busConnector;
-    rr::Renderer<rr::RenderConfigRasterixNexys> m_renderer{m_busConnector};
+    rr::Renderer<rr::RenderConfigRasterIXNexys> m_renderer{m_busConnector};
 #endif
 };
 

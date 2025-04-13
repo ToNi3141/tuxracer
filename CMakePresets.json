@@ -6,7 +6,7 @@
         "minor": 23,
         "patch": 0
     },
-    "include": ["Rasterix/CMakePresets.json"],
+    "include": ["RasterIX/CMakePresets.json"],
     "configurePresets": 
     [
         {
@@ -15,13 +15,13 @@
             "description": "Build for an zynq embedded linux device",
             "binaryDir": "${sourceDir}/build/zynq",
             "generator": "Unix Makefiles",
-            "inherits": [ "zynq_embedded_linux", "zynq_rrxif"],
+            "inherits": [ "zynq_embedded_linux", "zynq_rixif"],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "RRX_ENABLE_SPDLOG": "ON",
-                "RRX_DRIVER_DMA_PROXY": "ON",
+                "RIX_ENABLE_SPDLOG": "ON",
+                "RIX_DRIVER_DMA_PROXY": "ON",
                 "SDL_PATH": "../SDL",
-                "CMAKE_TOOLCHAIN_FILE": "Rasterix/toolchains/toolchain_zynq.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "RasterIX/toolchains/toolchain_zynq.cmake"
             }
         },
         {
@@ -30,13 +30,13 @@
             "description": "Build for an zynq embedded linux device",
             "binaryDir": "${sourceDir}/build/zynq",
             "generator": "Unix Makefiles",
-            "inherits": [ "zynq_embedded_linux", "zynq_rrxef"],
+            "inherits": [ "zynq_embedded_linux", "zynq_rixef"],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
-                "RRX_ENABLE_SPDLOG": "ON",
-                "RRX_DRIVER_DMA_PROXY": "ON",
+                "RIX_ENABLE_SPDLOG": "ON",
+                "RIX_DRIVER_DMA_PROXY": "ON",
                 "SDL_PATH": "../SDL",
-                "CMAKE_TOOLCHAIN_FILE": "Rasterix/toolchains/toolchain_zynq.cmake"
+                "CMAKE_TOOLCHAIN_FILE": "RasterIX/toolchains/toolchain_zynq.cmake"
             }
         }
     ]

@@ -49,7 +49,7 @@ extern "C"
 
 /* Shouldn't need to include glext.h if gl.h is recent, but alas we can't
  * count on that...  */
-#ifdef USE_RRXGL
+#ifdef USE_RIXGL
 #include "gl.h"
 #include "glu.h"
 #else

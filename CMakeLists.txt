@@ -44,7 +44,7 @@ include_directories(
 
 set(CMAKE_CXX_STANDARD 20)
 add_definitions(
-    -DUSE_RRXGL 
+    -DUSE_RIXGL 
     -DHAVE_SDL 
     -DTUXRACER_NO_ASSERT
     -DSPDLOG_ACTIVE_LEVEL=4
@@ -133,4 +133,4 @@ target_link_libraries(tuxracer
     PRIVATE gl spdlog::spdlog dmaproxy utils span threadrunner
 )
 
-add_subdirectory(Rasterix)
+add_subdirectory(RasterIX)

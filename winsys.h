@@ -22,7 +22,7 @@
 #include "tuxracer.h"
 #include "tux_types.h"
 
-#ifdef USE_RRXGL
+#ifdef USE_RIXGL
 #include "gl.h"
 #include "glu.h"
 #include "SDL.h"
@@ -34,7 +34,7 @@
 #else
 #   error "Neither SDL nor GLUT are present."
 #endif
-#endif // USE_RRXGL
+#endif // USE_RIXGL
 
 #ifdef __cplusplus
 extern "C"

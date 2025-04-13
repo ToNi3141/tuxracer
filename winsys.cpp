@@ -25,7 +25,7 @@
 /* Abstracts creation of windows, handling of events, etc. */
 
 #if defined( HAVE_SDL )
-#include "RRXGL.hpp"
+#include "RIXGL.hpp"
 #include "DMAProxyBusConnector.hpp"
 #include "MultiThreadRunner.hpp"
 #if defined( HAVE_SDL_MIXER )
@@ -58,22 +58,22 @@ class GLInitGuard
 public:
     GLInitGuard()
     {
-        rr::RRXGL::createInstance(m_busConnector, m_runner);
+        rr::RIXGL::createInstance(m_busConnector, m_runner);
     }
     ~GLInitGuard()
     {
-        rr::RRXGL::getInstance().destroy();
+        rr::RIXGL::getInstance().destroy();
     }
 
     void render()
     {
-        rr::RRXGL::getInstance().swapDisplayList();
-        rr::RRXGL::getInstance().uploadDisplayList();
+        rr::RIXGL::getInstance().swapDisplayList();
+        rr::RIXGL::getInstance().uploadDisplayList();
     }
 
-    rr::RRXGL& getInst()
+    rr::RIXGL& getInst()
     {
-        return rr::RRXGL::getInstance();
+        return rr::RIXGL::getInstance();
     }
 
 private:
