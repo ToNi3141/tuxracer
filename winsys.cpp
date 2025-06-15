@@ -58,7 +58,7 @@ class GLInitGuard
 public:
     GLInitGuard()
     {
-        rr::RIXGL::createInstance(m_busConnector, m_runner);
+        rr::RIXGL::createInstance(m_busConnector, m_workerThread, m_uploadThread);
     }
     ~GLInitGuard()
     {
@@ -68,7 +68,6 @@ public:
     void render()
     {
         rr::RIXGL::getInstance().swapDisplayList();
-        rr::RIXGL::getInstance().uploadDisplayList();
     }
 
     rr::RIXGL& getInst()
@@ -78,7 +77,8 @@ public:
 
 private:
     rr::DMAProxyBusConnector m_busConnector {};
-    rr::MultiThreadRunner m_runner {};
+    rr::MultiThreadRunner m_workerThread {};
+    rr::MultiThreadRunner m_uploadThread {};
 } guard;
 
 
