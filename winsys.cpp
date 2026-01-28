@@ -28,6 +28,8 @@
 #include "RIXGL.hpp"
 #include "DMAProxyBusConnector.hpp"
 #include "MultiThreadRunner.hpp"
+#include "renderer/devicedatauploader/DeviceDataUploader.hpp"
+#include "renderer/threadedvertextransformer/ThreadedVertexTransformer.hpp"
 #if defined( HAVE_SDL_MIXER )
 #   include "SDL_mixer.h"
 #endif
@@ -58,7 +60,7 @@ class GLInitGuard
 public:
     GLInitGuard()
     {
-        rr::RIXGL::createInstance(m_busConnector, m_workerThread, m_uploadThread);
+        rr::RIXGL::createInstance(m_threadedRasterizer);
     }
     ~GLInitGuard()
     {
@@ -79,6 +81,8 @@ private:
     rr::DMAProxyBusConnector m_busConnector {};
     rr::MultiThreadRunner m_workerThread {};
     rr::MultiThreadRunner m_uploadThread {};
+    rr::devicedatauploader::DeviceDataUploader m_dduDevice { m_busConnector };
+    rr::threadedvertextransformer::ThreadedVertexTransformer m_threadedRasterizer { m_dduDevice, m_workerThread, m_uploadThread };
 } guard;
 
 
